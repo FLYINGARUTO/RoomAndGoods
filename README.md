@@ -1,20 +1,18 @@
 backend implementation is in "**myproject**" folder
 
 
-before you run it:\
+before you run it:<br />
 
 
-pip install django djangorestframework\
-pip install django-cors-headers\
-
-pip install mysqlclient\
-
-npm install vue axios vue-router\
+pip install django djangorestframework<br />
+pip install django-cors-headers<br />
+pip install mysqlclient<br />
+npm install vue axios vue-router<br />
 
 
 
-how to run it:\
+how to run it:<br />
 
 
-cd into myproject and run **python manage.py runserver** to start django \
+cd into myproject and run **python manage.py runserver** to start django <br />
 cd into myproject and run **npm run dev** to start vue
