@@ -1,14 +1,4 @@
-myproject/         # Django backend
-├── backend/
-├── myproject/
-└── manage.py
-
-frontend/          # Vue frontend
-├── src/
-├── public/
-├── package.json
-└── node_modules/
-
+backend implementation is in "**myproject**" folder
 
 
 
