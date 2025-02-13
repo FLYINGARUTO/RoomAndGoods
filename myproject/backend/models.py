@@ -124,19 +124,22 @@ class Message(models.Model):
         return f'Message from User {self.from_id} to User {self.to_id}'
 
 
-class PostPicture(models.Model):
-    id = models.AutoField(primary_key=True) #自增主键
-    post_id = models.IntegerField() # 所属帖子 ID， 非空
-    photo_url = models.CharField(max_length=255) # 其中一张图片的url，非空
-    order = models.IntegerField() # 照片的序号
-    created_time = models.DateTimeField(auto_now_add=True) # 创建时间，自动记录发送时间
-    
-    class Meta:
-        db_table = 'post_pic'  # 数据库表名为 post_pic
-        verbose_name = 'PostPicture'  # Django 后台单数显示为 PostPicture
-        verbose_name_plural = 'PostPictures'  # Django 后台复数显示为 PostPictures
-        ordering = ['-created_time']  # 默认按消息创建时间倒序排列
 
-    def __str__(self):
-        return f'The url of the {self.order}th photo in no.{self.post_id} post is {self.photo_url}'
+class PostPic(models.Model):
+    id = models.AutoField(primary_key=True)  # 自增主键
+    post = models.ForeignKey('Post', on_delete=models.CASCADE, related_name='pictures')  # 关联帖子
+    photo_url = models.CharField(max_length=255)  # 存储图片 URL
+    order = models.IntegerField(null=True, blank=True)  # 图片顺序，允许为空
+    created_time = models.DateTimeField(auto_now_add=True)  # 创建时间，自动记录
+
+    class Meta:
+        db_table = 'post_pic'  # 指定数据库表名
+        ordering = ['order', 'id']  # 默认按 `order` 排序，如果为空则按 `id`
+        verbose_name = 'Post Picture'
+        verbose_name_plural = 'Post Pictures'
+    
+    # how to make use of the 'related_name'    
+    # post = Post.objects.get(id=1)
+    # pictures = post.pictures.all()  # 直接用 related_name 反向查询所有关联的图片
+
  
