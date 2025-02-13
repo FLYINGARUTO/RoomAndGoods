@@ -41,7 +41,6 @@ class Post(models.Model):
     details = models.CharField(max_length=255)  # 详细描述，非空
     views = models.IntegerField(default=0)  # 浏览量，默认为 0
     likes = models.IntegerField(default=0)  # 点赞数，默认为 0
-    photo_urls = models.CharField(max_length=255)  # 图片链接，非空
     category = models.CharField(max_length=255)  # 分类，非空
     create_time = models.DateTimeField(auto_now_add=True)  # 创建时间，自动添加
     delete_time = models.DateTimeField(blank=True, null=True)  # 删除时间，允许为空（软删除）
@@ -123,3 +122,21 @@ class Message(models.Model):
 
     def __str__(self):
         return f'Message from User {self.from_id} to User {self.to_id}'
+
+
+class PostPicture(models.Model):
+    id = models.AutoField(primary_key=True) #自增主键
+    post_id = models.IntegerField() # 所属帖子 ID， 非空
+    photo_url = models.CharField(max_length=255) # 其中一张图片的url，非空
+    order = models.IntegerField() # 照片的序号
+    created_time = models.DateTimeField(auto_now_add=True) # 创建时间，自动记录发送时间
+    
+    class Meta:
+        db_table = 'post_pic'  # 数据库表名为 post_pic
+        verbose_name = 'PostPicture'  # Django 后台单数显示为 PostPicture
+        verbose_name_plural = 'PostPictures'  # Django 后台复数显示为 PostPictures
+        ordering = ['-created_time']  # 默认按消息创建时间倒序排列
+
+    def __str__(self):
+        return f'The url of the {self.order}th photo in no.{self.post_id} post is {self.photo_url}'
+ 
