@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .models import Banner,Post,PostPic
 from .serializer import PostSerializer  # Import the serializer
-
+from datetime import datetime
 @api_view(['GET'])
 def hello_world(request):
     # banner=Banner.objects.create(picture_url="/static/pic/1.png",admin_id=10)
@@ -26,6 +26,16 @@ def post_test(request):
 
 @api_view(['GET'])
 def get_post_list(request):
-    post = Post.objects.all()  # Get a single post
-    serialized_post = PostSerializer(post,many=True)  # Convert to JSON format
+    posts = Post.objects.all()  # Get a single post
+    for post in posts:
+       post.create_time=post.create_time.strftime("%Y-%m-%d %H:%M:%S") 
+    serialized_post = PostSerializer(posts,many=True)  # Convert to JSON format
+    return Response({'code': 200, 'data': serialized_post.data})
+
+@api_view(['GET'])
+def get_post_by_id(request,id):
+
+    post = Post.objects.get(id=id)  # Get a single post
+    post.create_time=post.create_time.strftime("%Y-%m-%d %H:%M:%S")
+    serialized_post = PostSerializer(post)  # Convert to JSON format
     return Response({'code': 200, 'data': serialized_post.data})

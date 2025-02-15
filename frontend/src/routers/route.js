@@ -8,7 +8,21 @@ const router =createRouter({
         {
             path:"/",
             name:"home",
-            component: ()=>import('../views/Homepage.vue'),
+            component: ()=>import('../views/HomeView.vue'),
+            children:[
+                {
+                    path:'',
+                    name:"home-post-list",
+                    component:()=>import('@/views/home/Home.vue')
+
+                },{
+                    path:'/post/:id',
+                    name:"home-post-detail",
+                    props:true,
+                    component:()=>import('@/views/home/PostDetail.vue')
+                }
+
+            ]
         }
         
     ]

@@ -41,7 +41,10 @@ const sortedPosts = computed(() => {
       <!-- Main Content -->
       <div class="main-content">
         <!-- Banner -->
-        <div class="banner">Banner</div>
+        <div class="banner">
+          <!-- <img src="../assets/banner.png" class="banner-img"> -->
+          <text style="font-weight: bold;">Advertising Space for Rent</text>
+        </div>
   
         <!-- Sorting & Post Button -->
         <div class="sort-bar">
@@ -53,7 +56,7 @@ const sortedPosts = computed(() => {
         <!-- Post List -->
         <div class="post-list">
           <el-card v-for="post in sortedPosts" :key="post.title" shadow="hover" class="post-card">
-            <h3>{{ post.title }}</h3>
+            <h3 style="font-weight: bold;">{{ post.title }}</h3>
             <p>{{ post.details }}</p>
             <p>{{ post.views }} views, {{ post.date }}</p>
           </el-card>
@@ -112,14 +115,20 @@ const sortedPosts = computed(() => {
   .banner {
     width: 100%;
     height: 100px;
-    background: lightgray;
+    background: white;
     border-radius: 15px;
+    border: 3px solid #eeeeee;    
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 20px;
+    overflow: hidden; 
   }
-  
+  .banner-img {
+  max-width: 100%;  /* ✅ 确保图片不会超出 */
+  max-height: 100%; /* ✅ 确保图片不会超出 */
+  object-fit: contain; /* ✅ 保持比例 */
+}
   /* Sorting Bar */
   .sort-bar {
     display: flex;
