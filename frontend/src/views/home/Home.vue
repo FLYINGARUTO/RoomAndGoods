@@ -57,8 +57,11 @@
               @click="goToDetail(post.id)">
 
           <h3 style="font-weight: bold;">{{ post.title }}</h3>
-          <p>{{ post.details }}</p>
-          <p>{{ post.views }} views, {{ post.date }}</p>
+          <p style="margin-top: 5px;">{{ post.details }}</p>
+          <div style="margin-top: 5px;justify-content: space-between; display: flex; color: darkgray;">
+            <p>{{ post.views }} views</p> 
+            <p>{{ post.date }}</p>
+          </div>
         </el-card>
       </div>
     </div>

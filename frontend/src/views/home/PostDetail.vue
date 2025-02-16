@@ -1,35 +1,43 @@
 <template>
     <div class="post-container">
-      <!-- User Info Section -->
-      <div class="user-info">
-        <el-avatar class="avatar">Avatar</el-avatar>
-        <div>
-          <p>{{ postData.views }} views     {{ postData.create_time }}</p>
+      <div class="post-card">
+                <!-- User Info Section -->
+        <div class="user-info">
+          <el-avatar >
+            <img class="avatar" src="../../assets/qqlogo.png">
+          </el-avatar>
+          <div>
+            <p>{{ postData.create_time }}</p>
+          </div>
+          <el-button type="info" class="message-btn">Message</el-button>
         </div>
-        <el-button type="info" class="message-btn">Message</el-button>
-      </div>
+    
+        <el-divider></el-divider>
+    
+        <!-- Post Content -->
+        <div class="post-content">
+        
+              
+          <h3  style="font-weight: bold;">{{postData.title}}</h3>
+          <p class="post-details">{{postData.details }}</p>
   
-      <el-divider></el-divider>
-  
-      <!-- Post Content -->
-      <div class="post-content">
-       
-            
-        <h3  style="font-weight: bold;">{{postData.title}}</h3>
-        <p class="post-details">{{postData.details }}</p>
- 
-        <!-- Photo Box -->
-        <div class="photo-box">
-          Photos
-        </div>
-        <div class="reaction-icons">
-            <text>24👍</text>
-            <text>-</text>
-            <text>13⭐</text>
-            <text>-</text>
-            <text>2💬</text>
+          <!-- Photo Box -->
+          <div class="photo-box">
+            <div v-for="(photo,index) in photoUrls" :key="index" class="image-wrapper">
+              <img :src="photo.photo_url" alt="post image"/> 
+            </div>
+              
+          </div>
+          <div class="reaction-icons">
+              <text>24👍</text>
+              <text>-</text>
+              <text>13⭐</text>
+              <text>-</text>
+              <text>2💬</text>
+          </div>
         </div>
       </div>
+
     </div>
   </template>
   
@@ -42,25 +50,34 @@
     import { useRoute } from 'vue-router';
     const postData = ref({ });
     const route = useRoute()
+    const photoUrls=ref([])
     onMounted(()=>{
         console.log(route.params)
         const id=route.params.id;
         get(`/api/get-post/${id}`,(res)=>{
             console.log(`response to /api/get-post/${id} : `,res)
             postData.value=res
+            get(`/api/get-pic-urls/${id}`,(res)=>{
+              photoUrls.value=res
+            })
         })
+     
     })
   </script>
   
   <style scoped>
 .post-container {
-  width: 60vw;
-  max-width: 800px;
-  margin: 20px auto;
-  background: white;
-  padding: 15px;
-  border-radius: 10px;
-  border: 1px solid #ddd;
+    overflow-y: auto;
+    flex: 1;  /* 让它自动填充剩余空间 */
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    width: 500px;
+    margin: 10px;
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
 }
 
 /* 用户信息栏 */
@@ -73,8 +90,9 @@
 
 /* 头像 */
 .avatar {
-  font-size: 14px;
-  background: white;
+  height: 60px;
+  width: 60px;
+  background: #eeeeee;
   color: black;
   border: 1px solid black;
   padding: 10px;
@@ -95,17 +113,38 @@
 }
 /* 让照片区域撑满 */
 .photo-box {
+  padding: 5px;
+  flex-wrap: wrap;  
   width: 100%;
-  height: 150px;
-  margin: 10px 0;
+  height: 300px;
+  
   border: 1px solid black;
-  border-radius: 20px;
+  border-radius: 5px;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  
   font-weight: bold;
 }
 
+/* 每张图片的容器 */
+.image-wrapper {
+  width: 150px;   /* 固定盒子宽度 */
+  height: 150px;  /* 固定盒子高度 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f8f8f8; /* 背景色 */
+  margin: 3px;
+  overflow: hidden;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* 让图片保持原始比例 */
+.image-wrapper img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; /* 保持比例 */
+}
 /* 让 reaction-icons 右对齐 */
 .reaction-icons {
   display: flex;
