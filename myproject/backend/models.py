@@ -62,7 +62,7 @@ class Comment(models.Model):
     to_id = models.IntegerField()  # 被回复用户 ID，非空
     comment = models.CharField(max_length=255)  # 评论内容，最大长度 255，非空
     read = models.IntegerField(default=0)  # 是否已读，默认为 0
-
+    create_time=models.DateTimeField(auto_now_add=True) 
     class Meta:
         db_table = 'comment'  # 数据库表名为 comment
         verbose_name = 'Comment'  # Django 后台单数显示为 Comment

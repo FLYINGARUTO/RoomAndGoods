@@ -35,6 +35,17 @@
               <text>-</text>
               <text>2💬</text>
           </div>
+          <div class="comment-list">
+            <el-card v-for="comment in comments" :key="comment.id" shadow="hover" class="comment-card">
+
+              <h3>评论者id:{{  comment.from_id }}</h3>
+              <p style="margin-top: 5px;">{{ comment.comment }}</p>
+              <div style="margin-top: 5px;justify-content: space-between; display: flex; color: darkgray;">
+                
+                <p>{{ comment.create_time }}</p>
+              </div>
+            </el-card>
+          </div>
         </div>
       </div>
 
@@ -51,6 +62,7 @@
     const postData = ref({ });
     const route = useRoute()
     const photoUrls=ref([])
+    const comments=ref([])
     onMounted(()=>{
         console.log(route.params)
         const id=route.params.id;
@@ -60,6 +72,10 @@
             get(`/api/get/pic-urls/${id}`,(res)=>{
               photoUrls.value=res
             })
+            get(`/api/get/comments/${id}`,(res)=>{
+              comments.value=res
+              // console.log(res)
+            })
         })
      
     })
@@ -67,7 +83,7 @@
   
   <style scoped>
 .post-container {
-
+    overflow-y: auto;
     flex-direction: column;
     padding: 10px;
     width: 700px;
@@ -151,6 +167,17 @@
   gap: 8px;
   align-self: flex-end;
 }
-
+.comment-list {
+    margin-top: 10px;
+    flex: 1;
+    width: 100%; /* Ensure it takes full width */
+    max-width: 100%;
+  }
+  
+  .comment-card {
+    margin-bottom: 10px;
+    width: 100%;
+    height: 80%;
+  }
   </style>
   

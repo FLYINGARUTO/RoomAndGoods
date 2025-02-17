@@ -8,3 +8,7 @@ class PostPicSerializer(serializers.ModelSerializer):
     class Meta:
         model = PostPic
         fields = '__all__'  # or specify only needed fields, e.g., ['id', 'title', 'content']
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = '__all__'  # or specify only needed fields, e.g., ['id', 'title', 'content']

@@ -47,3 +47,11 @@ def get_post_pic(request,id):
     pic_urls=PostPic.objects.filter(post=id)
     serialized_pics = PostPicSerializer(pic_urls,many=True)  # Convert to JSON format
     return Response({'code': 200, 'data': serialized_pics.data})
+
+@api_view(['GET'])
+def get_comments(request,id):
+    comments=Comment.objects.filter(post_id=id)
+    for comment in comments:
+        comment.create_time=comment.create_time.strftime("%Y-%m-%d %H:%M:%S")
+    serialized_comments=CommentSerializer(comments,many=True)
+    return Response({'code':200,'data':serialized_comments.data})
