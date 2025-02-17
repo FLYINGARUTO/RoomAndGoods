@@ -54,10 +54,10 @@
     onMounted(()=>{
         console.log(route.params)
         const id=route.params.id;
-        get(`/api/get-post/${id}`,(res)=>{
+        get(`/api/get/post/${id}`,(res)=>{
             console.log(`response to /api/get-post/${id} : `,res)
             postData.value=res
-            get(`/api/get-pic-urls/${id}`,(res)=>{
+            get(`/api/get/pic-urls/${id}`,(res)=>{
               photoUrls.value=res
             })
         })
@@ -67,13 +67,13 @@
   
   <style scoped>
 .post-container {
-    overflow-y: auto;
-    flex: 1;  /* 让它自动填充剩余空间 */
-    display: flex;
+
     flex-direction: column;
     padding: 10px;
-    width: 500px;
-    margin: 10px;
+    width: 700px;
+    max-width: 100%;  /* Increase this value */
+    margin: 30px auto;  /*Center the content */
+
     background: white;
     padding: 15px;
     border-radius: 10px;
@@ -116,7 +116,7 @@
   padding: 5px;
   flex-wrap: wrap;  
   width: 100%;
-  height: 300px;
+  height: 500px;
   
   border: 1px solid black;
   border-radius: 5px;

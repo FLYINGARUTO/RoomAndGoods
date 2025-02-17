@@ -4,7 +4,7 @@
     import {get,post} from '@/net/index'
     import router from "@/routers/route"
     onMounted(() => {
-        get("/api/get_post_list",(res)=>{
+        get("/api/get/post-list",(res)=>{
             console.log(res)
             posts.value=res.map(item=>({
               id: item.id,
@@ -75,10 +75,12 @@
   /* 🌟 让 main-content 占满剩余空间 */
   .main-content {
     flex: 1;  /* 让它自动填充剩余空间 */
-    display: flex;
     flex-direction: column;
     padding: 10px;
-    width: 500px;
+    max-width: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
   }
   
   /* Banner */

@@ -1,8 +1,8 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from .models import Banner,Post,PostPic
-from .serializer import *  # Import the serializer
+from ..models import Banner,Post,PostPic
+from ..serializer import *  # Import the serializer
 from datetime import datetime
 @api_view(['GET'])
 def hello_world(request):
@@ -36,6 +36,8 @@ def get_post_list(request):
 def get_post_by_id(request,id):
 
     post = Post.objects.get(id=id)  # Get a single post
+    post.views+=1
+    post.save()
     post.create_time=post.create_time.strftime("%Y-%m-%d %H:%M:%S")
     serialized_post = PostSerializer(post)  # Convert to JSON format
     return Response({'code': 200, 'data': serialized_post.data})
