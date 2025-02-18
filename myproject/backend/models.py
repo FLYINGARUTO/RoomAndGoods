@@ -142,4 +142,9 @@ class PostPic(models.Model):
     # post = Post.objects.get(id=1)
     # pictures = post.pictures.all()  # 直接用 related_name 反向查询所有关联的图片
 
- 
+class UploadedFile(models.Model):
+    file = models.FileField(upload_to="uploads/")
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.file.name

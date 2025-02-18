@@ -20,6 +20,10 @@ const router =createRouter({
                     name:"home-post-detail",
                     props:true,
                     component:()=>import('@/views/home/PostDetail.vue')
+                },{
+                    path:'/post/new',
+                    name:"home-post-new",
+                    component:()=>import('@/views/post/PostPublish.vue')
                 }
 
             ]

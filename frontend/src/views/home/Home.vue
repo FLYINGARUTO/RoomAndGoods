@@ -48,7 +48,7 @@
           <el-button @click="sortBy = 'time'" :type="sortBy === 'time' ? 'primary' : ''">Sort by time</el-button>
         </div>
         
-        <el-button type="success" class="post-btn">Post</el-button>
+        <el-button type="success" class="post-btn" @click="router.push('/post/new')">Post</el-button>
       </div>
 
       
