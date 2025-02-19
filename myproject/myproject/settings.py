@@ -56,6 +56,16 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # 允许 Vue 前端访问的地址
+    "http://127.0.0.1:5173"
+]
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "authorization",
+    "content-type",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+    "headers",  # Allow the 'headers' field
 ]
 
 ROOT_URLCONF = 'myproject.urls'
@@ -82,19 +92,34 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',       # 使用 MySQL 作为数据库引擎
+#         'NAME': 'the_platform',               # 数据库名称
+#         'USER': 'admin',             # 数据库用户名
+#         'PASSWORD': 'itglasgow',         # 数据库密码
+#         'HOST': 'database-1.c3iemm2ycfl8.us-east-1.rds.amazonaws.com',                # RDS 实例的 endpoint，如 mydb-instance.abcdefghijk.us-west-2.rds.amazonaws.com
+#         'PORT': '3306',                             # 端口号，默认 3306
+#         'OPTIONS': {
+#             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+#         },
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',       # 使用 MySQL 作为数据库引擎
-        'NAME': 'the_platform',               # 数据库名称
-        'USER': 'admin',             # 数据库用户名
-        'PASSWORD': 'itglasgow',         # 数据库密码
-        'HOST': 'database-1.c3iemm2ycfl8.us-east-1.rds.amazonaws.com',                # RDS 实例的 endpoint，如 mydb-instance.abcdefghijk.us-west-2.rds.amazonaws.com
-        'PORT': '3306',                             # 端口号，默认 3306
+        'ENGINE': 'mysql.connector.django',
+        'NAME': 'GoodsAndRooms',
+        'USER': 'root',
+        'PASSWORD': 'lx120688',
+        'HOST': '127.0.0.1',  # Use 'localhost' if socket connection is enabled
+        'PORT': '3306',
         'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+            'auth_plugin': 'caching_sha2_password',
         },
     }
 }
+
+
 
 
 

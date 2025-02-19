@@ -38,17 +38,22 @@
     <div class="main-content">
       
       <div class="banner">
-        <text style="font-weight: bold;">Advertising Space for Rent</text>
+        <text style="font-weight: bold;">投放广告联系abc@abc.com</text>
       </div>
 
      
       <div class="sort-bar">
         <div>
-          <el-button @click="sortBy = 'views'" :type="sortBy === 'views' ? 'primary' : ''">Sort by views</el-button>
-          <el-button @click="sortBy = 'time'" :type="sortBy === 'time' ? 'primary' : ''">Sort by time</el-button>
+          <label style="margin: 15px;font-weight: 600;">Sort by</label>
+          <el-button @click="sortBy = 'views'"
+                     :type="sortBy === 'views' ? 'primary' : ''"
+                     class="btn">views</el-button>
+          <el-button @click="sortBy = 'time'" 
+                      :type="sortBy === 'time' ? 'primary' : ''"
+                      class="btn">time</el-button>
         </div>
         
-        <el-button type="success" class="post-btn" @click="router.push('/post/new')">Post</el-button>
+        <el-button type="success" class="btn" @click="router.push('/post/new')">Post</el-button>
       </div>
 
       
@@ -104,6 +109,7 @@
   align-items: center;
   width: 100%;
   margin-top: 10px;
+  
 }
 
   
@@ -113,10 +119,13 @@
   
   /* Post List */
   .post-list {
+    overflow:auto;
     margin-top: 10px;
     flex: 1;
   }
-  
+  .btn{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+  }
   .post-card {
     margin-bottom: 10px;
   }

@@ -6,11 +6,16 @@ import router from '@/routers/route';
     <div class="homepage">
       <!-- Sidebar -->
       <div class="sidebar" > 
-        <el-button class="sidebar-btn" @click="router.push('/')">All</el-button>
-        <el-button class="sidebar-btn" @click="router.push('/')">Used</el-button>
-        <el-button class="sidebar-btn" @click="router.push('/')">Sublet</el-button>
-        <el-button class="sidebar-btn">My</el-button>
-        <el-button class="sidebar-btn logout">Logout</el-button>
+        <label class="sidebar-btn" @click="router.push('/')">All</label>
+        <label class="sidebar-btn" @click="router.push('/')">Used</label>
+        <label class="sidebar-btn" @click="router.push('/')">Sublet</label>
+        <div class="side-bottom"> 
+          <label class="sidebar-btn">My</label>
+          <label class="sidebar-btn logout">Logout</label>
+        </div>
+
+       
+        
       </div>
   
       <router-view v-slot="{Component}">
@@ -29,6 +34,7 @@ import router from '@/routers/route';
     height: 100vh;
     width: 100%;  /* 确保撑满整个屏幕 */
     overflow: hidden;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
   }
   
   /* 🌟 让 sidebar 贴紧左边 */
@@ -41,23 +47,41 @@ import router from '@/routers/route';
     display: flex;
     flex-direction: column;
     align-items: center; /* ✅ 让所有按钮居中对齐 */
-    padding: 10px;
+    padding: 50px;
 }
 
 .sidebar-btn {
-    width: 90%; /* ✅ 统一按钮宽度 */
+  text-align: center;
+  background-color:white;
+  margin-bottom: 30px;
+    width: 100%; /* ✅ 统一按钮宽度 */
     max-width: 180px; /* ✅ 确保不会太宽 */
-    margin-bottom: 10px; /* ✅ 让按钮间隔一致 */
+    font-size: 20px;
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: 700;
+  border:1px solid darkgray;
+  border-radius: 5px;
+
+
 }
 
 .logout {
     background: #d9534f;
     color: white;
-    position: relative;
-    margin-top: auto;
-    width: 90%; /* ✅ 让 Logout 按钮和其他按钮宽度一致 */
-}
 
+
+   
+}
+.side-bottom{
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+
+}
   
 
   </style>

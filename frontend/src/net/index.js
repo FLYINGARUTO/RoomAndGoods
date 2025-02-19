@@ -120,4 +120,4 @@ function getTokenHeader(){
 //     },failure)
 
 // }
-export {get,post }
+export {get,post,internalPost }
