@@ -8,5 +8,6 @@ urlpatterns = [
     path('api/get/post/<int:id>',get_post_by_id),
     path('api/get/pic-urls/<int:id>',get_post_pic),
     path('api/get/comments/<int:id>',get_comments),
-    path('api/post/publish/',publish)
+    path('api/post/publish/',publish),
+    path('api/post/comment/',comment)
 ]

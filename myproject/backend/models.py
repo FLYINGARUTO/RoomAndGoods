@@ -41,6 +41,8 @@ class Post(models.Model):
     details = models.CharField(max_length=255)  # 详细描述，非空
     views = models.IntegerField(default=0)  # 浏览量，默认为 0
     likes = models.IntegerField(default=0)  # 点赞数，默认为 0
+    stars = models.IntegerField(default=0)  # 收藏数，默认为 0
+    comments = models.IntegerField(default=0) # 评论数，默认为0
     category = models.CharField(max_length=255)  # 分类，非空
     create_time = models.DateTimeField(auto_now_add=True)  # 创建时间，自动添加
     delete_time = models.DateTimeField(blank=True, null=True)  # 删除时间，允许为空（软删除）

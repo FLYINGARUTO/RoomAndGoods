@@ -20,7 +20,7 @@
               
           <h3  style="font-weight: bold;">{{postData.title}}</h3>
           <p class="post-details">{{postData.details }}</p>
-  
+
           <!-- Photo Box -->
           <div class="photo-box">
             <div v-for="(photo,index) in photoUrls" :key="index" class="image-wrapper">
@@ -29,13 +29,23 @@
               
           </div>
           <div class="reaction-icons">
-              <text>24👍</text>
-              <text>-</text>
-              <text>13⭐</text>
-              <text>-</text>
-              <text>2💬</text>
+              <text class="reaction-icon">👍{{postData.likes}}</text>
+
+              <text class="reaction-icon">⭐{{postData.stars}}</text>
+
+              <text class="reaction-icon">💬{{postData.comments}}</text>
           </div>
+          
+            
+         
           <div class="comment-list">
+
+            <el-card shadow="hover" style="margin-bottom: 10px;">
+
+              <el-input v-model="commentValue" placeholder="Leave your comment here" style="width: 90%;"></el-input>
+              <button style="position: relative;left: 10px;height: 30px;" @click="sendComment">Send</button>
+            </el-card>
+
             <el-card v-for="comment in comments" :key="comment.id" shadow="hover" class="comment-card">
 
               <h3>评论者id:{{  comment.from_id }}</h3>
@@ -78,7 +88,7 @@
     const photoUrls=ref([])
     const comments=ref([])
     const inputValue=ref('')
-
+    const commentValue=ref('')
     const showInput=ref(false)
     onMounted(()=>{
         console.log(route.params)
@@ -113,6 +123,18 @@
         alert("Message Sent");
       })
       
+    }
+    const sendComment=()=>{
+      post('api/post/comment/',{
+        "from-id":1, //之后这里要动态的获取当前登录用户的id
+        "to-id":postData.value.publisher_id,
+        "comment":commentValue.value,
+        "post-id":postData.value.id
+      },()=>{
+        commentValue.value=""
+        alert("Commented successfully")
+        router.go(0) //刷新网页
+      })
     }
   </script>
   
@@ -198,12 +220,21 @@
 }
 /* 让 reaction-icons 右对齐 */
 .reaction-icons {
+
+  font-size: 16px;
   display: flex;
-  gap: 8px;
-  align-self: flex-end;
+  justify-content: space-between;
+
+  width: 60%;
+  /* gap: 30px; */
+  align-self:flex-end;
+}
+.reaction-icon{
+
+  border-radius: 15px;
+
 }
 .comment-list {
-    margin-top: 10px;
     flex: 1;
     width: 100%; /* Ensure it takes full width */
     max-width: 100%;

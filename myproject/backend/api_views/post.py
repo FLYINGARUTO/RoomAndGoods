@@ -57,6 +57,15 @@ def get_comments(request,id):
     serialized_comments=CommentSerializer(comments,many=True)
     return Response({'code':200,'data':serialized_comments.data})
 
+@api_view(['POST'])
+def comment(request):
+    comment = request.data.get('comment')
+    from_id = request.data.get('from-id')
+    to_id = request.data.get('to-id')
+    post_id = request.data.get('post-id')
+    commentObj=Comment.objects.create(from_id=from_id,to_id=to_id,post_id=post_id,comment=comment)
+    commentObj.save()
+    return Response({'code':200,'message':"Comment sent"})
 
 
 
