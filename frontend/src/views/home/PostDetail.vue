@@ -9,9 +9,9 @@
           <div>
             <p>{{ postData.create_time }}</p>
           </div>
-          <el-button type="info" class="message-btn">Message</el-button>
+          <el-button type="info" class="message-btn" @click="openInputBox">Message</el-button>
         </div>
-    
+        
         <el-divider></el-divider>
     
         <!-- Post Content -->
@@ -46,6 +46,19 @@
               </div>
             </el-card>
           </div>
+          <div>
+            <!-- <input-box :caption="caption" :show="showInput" :value="inputValue" @close="showInput=false" @confirm="inputBoxYes" @cancel="showInput=false">
+          </input-box> -->
+            <el-dialog v-model="showInput" title="Send Message">
+              <el-input v-model="inputValue"></el-input>
+              <template #footer>
+                <span>
+
+                  <el-button @click="inputBoxYes" style="width: 100px;border-radius: 10px;">send</el-button>
+                </span>
+              </template>
+            </el-dialog>
+          </div>
         </div>
       </div>
 
@@ -59,10 +72,14 @@
     import {get,post} from '@/net/index'
     import router from '@/routers/route'
     import { useRoute } from 'vue-router';
+    
     const postData = ref({ });
     const route = useRoute()
     const photoUrls=ref([])
     const comments=ref([])
+    const inputValue=ref('')
+
+    const showInput=ref(false)
     onMounted(()=>{
         console.log(route.params)
         const id=route.params.id;
@@ -79,6 +96,24 @@
         })
      
     })
+
+    const openInputBox=()=>{
+
+      showInput.value=true
+
+    }
+    const inputBoxYes=()=>{
+
+      post('api/post/send-msg/',{
+        "from-id":1, //之后这里要动态的获取当前登录用户的id
+        "to-id":postData.value.publisher_id,
+        "msg":inputValue.value
+      },()=>{
+        showInput.value=false 
+        alert("Message Sent");
+      })
+      
+    }
   </script>
   
   <style scoped>

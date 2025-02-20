@@ -12,3 +12,7 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = '__all__'  # or specify only needed fields, e.g., ['id', 'title', 'content']
+class MessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        fields = '__all__'  # or specify only needed fields, e.g., ['id', 'title', 'content']
