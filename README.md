@@ -8,11 +8,11 @@ pip install django djangorestframework<br />
 pip install django-cors-headers<br />
 pip install mysqlclient<br />
 pip install mysql-connector-python<br />
-
+pip install djangorestframework-simplejwt<br />
 cd into frontend/ to run the npm-started lines:<br />
 npm install vue axios vue-router<br />
 npm install -D unplugin-vue-components unplugin-auto-import<br />
-
+npm install pinia<br />
 
 
 
