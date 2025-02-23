@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from rest_framework.response import Response
-from rest_framework.decorators import api_view,parser_classes
+from rest_framework.decorators import api_view,parser_classes,permission_classes
 from ..models import Banner,Post,PostPic
+from rest_framework.permissions import IsAuthenticated
 from ..serializer import *  # Import the serializer
 from datetime import datetime
 from ..utils.file import upload_to_s3
@@ -57,8 +58,10 @@ def get_comments(request,id):
     serialized_comments=CommentSerializer(comments,many=True)
     return Response({'code':200,'data':serialized_comments.data})
 
+@permission_classes([IsAuthenticated])
 @api_view(['POST'])
 def comment(request):
+    print("request headers:",request.headers)
     comment = request.data.get('comment')
     from_id = request.data.get('from-id')
     to_id = request.data.get('to-id')
@@ -75,9 +78,11 @@ def comment(request):
 """
 from django.conf import settings
 from rest_framework.parsers import MultiPartParser, FormParser
+@permission_classes([IsAuthenticated])
 @api_view(['POST'])
 @parser_classes([MultiPartParser, FormParser])  # Enables file uploads
 def publish(request):
+
     #先创建post记录
     title=request.data.get('title')
     details=request.data.get('details')

@@ -77,9 +77,9 @@
   
   <script setup>
     import { ref } from 'vue';
-    import { ElAvatar, ElButton, ElDivider, ElIcon } from 'element-plus';
+    import { ElAlert, ElAvatar, ElButton, ElDivider, ElIcon } from 'element-plus';
     import { onMounted } from 'vue';
-    import {get,post} from '@/net/index'
+    import {get,post,internalPost} from '@/net/index'
     import router from '@/routers/route'
     import { useRoute } from 'vue-router';
     
@@ -113,28 +113,35 @@
 
     }
     const inputBoxYes=()=>{
-
-      post('api/post/send-msg/',{
-        "from-id":1, //之后这里要动态的获取当前登录用户的id
-        "to-id":postData.value.publisher_id,
-        "msg":inputValue.value
-      },()=>{
-        showInput.value=false 
-        alert("Message Sent");
-      })
-      
+      if(localStorage.getItem("accessToken")!=null)
+        post('api/post/send-msg/',{
+          "from-id":1, //之后这里要动态的获取当前登录用户的id
+          "to-id":postData.value.publisher_id,
+          "msg":inputValue.value
+        },()=>{
+          showInput.value=false 
+          alert("Message Sent");
+        })
+     else{
+      alert('please login first')
+     } 
     }
     const sendComment=()=>{
-      post('api/post/comment/',{
-        "from-id":1, //之后这里要动态的获取当前登录用户的id
-        "to-id":postData.value.publisher_id,
-        "comment":commentValue.value,
-        "post-id":postData.value.id
-      },()=>{
-        commentValue.value=""
-        alert("Commented successfully")
-        router.go(0) //刷新网页
-      })
+      if(localStorage.getItem("accessToken")!=null)
+        post('api/post/comment/',{
+          "from-id":1, //之后这里要动态的获取当前登录用户的id
+          "to-id":postData.value.publisher_id,
+          "comment":commentValue.value,
+          "post-id":postData.value.id
+        },
+        ()=>{
+          commentValue.value=""
+          alert("Commented successfully")
+          router.go(0) //刷新网页
+        },)
+      else{
+        alert('please login first')
+      }
     }
   </script>
   
@@ -143,8 +150,9 @@
     overflow-y: auto;
     flex-direction: column;
     padding: 10px;
-    width: 700px;
-    max-width: 100%;  /* Increase this value */
+    width: 100%;
+    max-width: 800px;  /* Increase this value */
+    min-width: 600px;
     margin: 30px auto;  /*Center the content */
 
     background: white;

@@ -27,6 +27,10 @@ const router =createRouter({
                 }
 
             ]
+        },{
+            path:'/login',
+            name:'login-page',
+            component:()=>import('@/views/identity/LoginPage.vue')
         }
         
     ]

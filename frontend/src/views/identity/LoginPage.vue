@@ -2,7 +2,8 @@
 import {reactive,ref} from "vue";
 import {User,Lock} from '@element-plus/icons-vue'
 // import {login} from "../../net/index.js";
-// import router from "../../router/router.js";
+import router from "@/routers/route";
+import {get,post} from "@/net/index"
 
 const form =reactive({
   username:'',
@@ -13,40 +14,50 @@ const formRef=ref()
 
 const rule={
   username:[
-    {required: true,message:"请输入用户名"}
+    {required: true,message:"username cannot left blank"}
   ],
   password:[
-    {required: true,message:"请输入密码"}
+    {required: true,message:"password cannot left blank"}
   ]}
 
-// function loginForm(username,){
-//   formRef.value.validate((valid)=>{
-//     if(valid)
-//       login(form.username,form.password,form.remember,()=>{
-//         router.push('/index')
-//       })
-//   })
-// }
+function loginForm(){
+  formRef.value.validate((valid)=>{
+    if(valid){
+      post('api/post/login/',{username:form.username,password:form.password},(res)=>{
+        console.log("?",res)
+        
+        if(res.token){
+          localStorage.setItem('accessToken',res.token.access)
+          localStorage.setItem('refreshToken',res.token.refresh)
+        }
+        
+        router.push('/')
+        alert('Logged in')
+
+      })
+    }
+  })
+}
 </script>
 
 <template>
-  <div style="text-align: center;margin: 0 20px">
-    <div style="margin-top: 180px">
+  <div style="text-align: center; font-family: Verdana, Geneva, Tahoma, sans-serif;" class="container">
+    <div style="margin-top:60px">
 
-      <div style="font-size: 30px;font-weight: bold">登录</div>
-      <div style="font-size: 13px;color: grey">输入用户名和密码登录，访问更多功能</div>
+      <div style="font-size: 30px;font-weight: bold">Goods and Rooms</div>
+      <div style="font-size: 13px;color: grey">ready to explore?</div>
     </div>
     <div style="margin-top: 50px">
       <el-form :rules="rule" :model="form" ref="formRef">
           <el-form-item prop="username">
-            <el-input v-model="form.username" maxlength="30" type="text" placeholder="用户名/邮箱">
+            <el-input v-model="form.username" maxlength="30" type="text" placeholder="username">
               <template #prefix>
                 <el-icon><User/></el-icon>
               </template>
             </el-input>
           </el-form-item>
           <el-form-item prop="password">
-            <el-input v-model="form.password" maxlength="20" type="password" placeholder="密码">
+            <el-input v-model="form.password" maxlength="20" type="password" placeholder="password">
               <template #prefix>
                 <el-icon><Lock /></el-icon>
               </template>
@@ -54,18 +65,18 @@ const rule={
           </el-form-item>
           <el-row>
             <el-col :span="12" style="text-align: left">
-                <el-checkbox v-model="form.remember" label="记住我"/>
+                <el-checkbox v-model="form.remember" label="remember"/>
             </el-col>
             <el-col :span="12" style="text-align: right">
-                <el-link @click="router.push('/reset')">忘记密码？</el-link>
+                <el-link @click="router.push('/reset')">forgot password</el-link>
             </el-col>
           </el-row>
           <div style="margin-top: 40px">
-              <el-button @click="loginForm" style="width: 200px" type="success" plain>立即登录</el-button>
+              <el-button @click="loginForm" style="width: 200px" type="success" plain>login</el-button>
           </div>
-          <el-divider style="font-size: 13px;color: grey">没有账号？</el-divider>
+          <el-divider style="font-size: 13px;color: grey">no account?</el-divider>
           <div>
-            <el-button @click='router.push("/register")' style="width: 200px;" type="warning" plain>立即注册</el-button>
+            <el-button @click='router.push("/register")' style="width: 200px;" type="warning" plain>register</el-button>
           </div>
       </el-form>
     </div>
@@ -73,5 +84,16 @@ const rule={
 </template>
 
 <style scoped>
-
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;  /* 适当设定宽度 */
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
 </style>

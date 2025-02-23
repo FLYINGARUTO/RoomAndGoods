@@ -3,6 +3,8 @@
     import { ref,computed} from 'vue';
     import {get,post} from '@/net/index'
     import router from "@/routers/route"
+    import { usePostStore } from '@/store/postStore';
+    const postStore =usePostStore()
     onMounted(() => {
         get("/api/get/post-list",(res)=>{
             console.log(res)
@@ -12,12 +14,18 @@
               user: item.publisher_id,
               details: item.details,
               views: item.views,
-              date: item.create_time
+              date: item.create_time,
+              category: item.category
             }))
           })
 
     })
-
+    //根据分类过滤
+    const filteredPosts = computed(() =>
+            postStore.selectedCategory === "All"
+                ? posts.value
+                : posts.value.filter(post => post.category === postStore.selectedCategory)
+        );
     // Sample post data
     const posts = ref([]);
 
@@ -25,11 +33,18 @@
 
     // Sorting logic
     const sortedPosts = computed(() => {
-      return [...posts.value].sort((a, b) => (sortBy.value === 'views' ? b.views - a.views : new Date(b.date) - new Date(a.date)));
+      return [...filteredPosts.value].sort((a, b) => (sortBy.value === 'views' ? b.views - a.views : new Date(b.date) - new Date(a.date)));
     });
 
     const goToDetail=(postId)=>{
         router.push(`/post/${postId}`)
+    }
+    const toPost=()=>{
+      if(!localStorage.getItem('accessToken')){
+        alert('please login first')
+      }else{
+        router.push('/post/new')
+      }
     }
 
 </script>
@@ -53,7 +68,7 @@
                       class="btn">time</el-button>
         </div>
         
-        <el-button type="success" class="btn" @click="router.push('/post/new')">Post</el-button>
+        <el-button type="success" class="btn" @click="toPost">Post</el-button>
       </div>
 
       

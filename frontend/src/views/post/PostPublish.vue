@@ -79,12 +79,16 @@ import router from "@/routers/route";
           formData.append(`photos`, file); // Backend should expect 'photos' as an array
         }
       });
-    
-      internalPost("http://127.0.0.1:8000/api/post/publish/", formData, {
-          headers: {
+      const token=localStorage.getItem('accessToken')
+      const headers={
             "Content-Type": "multipart/form-data",
-          },
-        },(response)=>{
+            "Authorization": `Bearer ${token}`,
+          } 
+      console.log("🚀 Final Request Headers:", JSON.stringify(headers, null, 2)); // ✅ 确保 headers 正确
+
+      internalPost("http://127.0.0.1:8000/api/post/publish/", formData,
+          headers
+        ,(response)=>{
           console.log("Upload Successful:", response);
           alert("Post Published Successfully!");
           processing.value=false
@@ -95,9 +99,14 @@ import router from "@/routers/route";
           router.push('/')
         },(error)=>{
           console.error("Upload Failed:", error);
-        alert("Failed to publish post.");
+          alert("Failed to publish post.");
+          
         });
-      
+        processing.value=false
+        form.value=[]
+        photos.value=Array(6).fill(null)
+        photoFiles.value=Array(6).fill(null)
+    
     }
     
 

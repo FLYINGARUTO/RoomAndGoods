@@ -1,9 +1,9 @@
 import axios from "axios";
 import {ElMessage} from "element-plus";
 import router from "../routers/route.js";
-
-const authItemName="access_token"
-
+const refreshItemName="refreshToken"
+const authItemName="accessToken"
+const API_BASE_URL="http://127.0.0.1:8000"
 const defaultFailure=(message,code,url)=>{
     console.log(`请求地址：${url} ，状态码：${code} ，错误信息：${message}`)
     ElMessage.warning(message)
@@ -32,8 +32,21 @@ function internalPost(url,data,header,success,failure=defaultFailure,error=defau
             }else {
                 failure(data.message,data.code,url)
             }
-        }).catch(err =>
-            error(err)
+        }).catch(async(err) =>
+                {
+                    if (err.response && err.response.status === 401) {
+                    console.warn("🔄 Access token expired, trying to refresh...");
+                    const newToken = await refreshToken();
+                    if (newToken) {
+                        return internalPost(url, data, getTokenHeader(), success, failure, error);
+                    } else {
+                        ElMessage.error("身份验证失败，请重新登录！");
+                        router.push("/login"); // 重新跳转到登录页
+                    }
+                    } else {
+                        error(err);
+                    }
+                }
         )
 }
 function internalGet(url,header,success,failure=defaultFailure,error=defaultError){
@@ -46,8 +59,21 @@ function internalGet(url,header,success,failure=defaultFailure,error=defaultErro
             }else {
                 failure(data.message,data.code,url)
             }
-        }).catch(err =>
-            error(err)
+        }).catch(async(err) =>
+            {
+                if (err.response && err.response.status === 401) {
+                console.warn("🔄 Access token expired, trying to refresh...");
+                const newToken = await refreshToken();
+                if (newToken) {
+                    return internalGet(url,getTokenHeader(), success, failure, error);
+                } else {
+                    ElMessage.error("身份验证失败，请重新登录！");
+                    router.push("/login"); // 重新跳转到登录页
+                }
+                } else {
+                    error(err);
+                }
+            } 
         )
 }
 function post(url,data,success,failure=defaultFailure){
@@ -87,18 +113,20 @@ function get(url, success, failure = defaultFailure){
 function getAccessToken(){
     const token=localStorage.getItem(authItemName) || sessionStorage.getItem(authItemName)
     if(!token) return null
-    const authObj=JSON.parse(token)
-    if(authObj.expire<=new Date()){
-        deleteToken()
-        ElMessage.warning("登录状态已过期，请重新登录")
-        return null
-    }
-    return authObj.token
+    // const authObj=JSON.parse(token)
+    // if(authObj.expire<=new Date()){
+    //     deleteToken()
+    //     ElMessage.warning("登录状态已过期，请重新登录")
+    //     return null
+    // }
+    // return authObj.token
+    return token
 
 }
 
 function getTokenHeader(){
     const token=getAccessToken()
+    console.log('getTokenHeader:' ,token)
     return token ? {
         "Authorization":`Bearer ${token}`
     }:{}
@@ -118,6 +146,24 @@ function getTokenHeader(){
 //         ElMessage.success("退出登录成功")
 //         success()
 //     },failure)
+async function refreshToken() {
+    try {
+        const refresh = localStorage.getItem("refreshToken");
+        if (!refresh) {
+            console.error("❌ No refresh token available.");
+            return null;
+        }
 
+        const response = await axios.post(`${API_BASE_URL}/api/post/token/refresh/`, { refresh });
+        if (response.data.access) {
+            localStorage.setItem("accessToken", response.data.access);
+            console.log("✅ Token refreshed");
+            return response.data.access;
+        }
+    } catch (error) {
+        console.error("❌ Refresh token failed:", error);
+        return null;
+    }
+}
 // }
 export {get,post,internalPost }
