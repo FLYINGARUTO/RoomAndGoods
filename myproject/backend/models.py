@@ -61,6 +61,7 @@ class Post(models.Model):
 class Comment(models.Model):
     id = models.AutoField(primary_key=True)  # 自增主键
     from_id = models.IntegerField()  # 评论者 ID，非空
+    from_user=models.CharField(max_length=255)
     post_id = models.IntegerField()  # 所属帖子 ID，非空
     to_id = models.IntegerField()  # 被回复用户 ID，非空
     comment = models.CharField(max_length=255)  # 评论内容，最大长度 255，非空
@@ -72,7 +73,7 @@ class Comment(models.Model):
         verbose_name_plural = 'Comments'  # Django 后台复数显示为 Comments
 
     def __str__(self):
-        return f'Comment by User {self.from_id} on Post {self.post_id}'
+        return f'Comment by User {self.from_user} on Post {self.post_id}'
 
 
 class Like(models.Model):

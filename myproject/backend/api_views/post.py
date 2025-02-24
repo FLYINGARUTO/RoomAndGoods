@@ -68,10 +68,10 @@ def get_comments(request,id):
 def comment(request):
     print("request headers:",request.headers)
     comment = request.data.get('comment')
-    from_id = request.data.get('from-id')
+    from_user = request.data.get('from-user')
     to_id = request.data.get('to-id')
     post_id = request.data.get('post-id')
-    commentObj=Comment.objects.create(from_id=from_id,to_id=to_id,post_id=post_id,comment=comment)
+    commentObj=Comment.objects.create(from_user=from_user,to_id=to_id,post_id=post_id,comment=comment)
     commentObj.save()
     return Response({'code':200,'message':"Comment sent"})
 

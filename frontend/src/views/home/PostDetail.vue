@@ -56,7 +56,7 @@
 
             <el-card v-for="comment in comments" :key="comment.id" shadow="hover" class="comment-card">
 
-              <h3>评论者id:{{  comment.from_id }}</h3>
+              <h3>{{  comment.from_user }}</h3>
               <p style="margin-top: 5px;">{{ comment.comment }}</p>
               <div style="margin-top: 5px;justify-content: space-between; display: flex; color: darkgray;">
                 
@@ -171,7 +171,7 @@
     const sendComment=()=>{
       if(localStorage.getItem("accessToken")!=null)
         post('api/post/comment/',{
-          "from-id":1, //之后这里要动态的获取当前登录用户的id
+          "from-user":loginedUser.value, //之后这里要动态的获取当前登录用户的id
           "to-id":postData.value.publisher_id,
           "comment":commentValue.value,
           "post-id":postData.value.id
