@@ -9,5 +9,9 @@ urlpatterns = [
     path('api/get/pic-urls/<int:id>',get_post_pic),
     path('api/get/comments/<int:id>',get_comments),
     path('api/post/publish/',publish),
-    path('api/post/comment/',comment)
+    path('api/post/comment/',comment),
+    path('api/post/like/',like),
+    path('api/post/cancel-like/',cancel_like),
+    path('api/post/like-or-not/',hasLiked)
+    
 ]

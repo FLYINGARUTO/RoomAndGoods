@@ -26,6 +26,7 @@ def post_test(request):
     postpic2.save()
     return Response({'code':200,'message':"success"})
 
+#获取所有帖子
 @api_view(['GET'])
 def get_post_list(request):
     posts = Post.objects.all()  # Get a single post
@@ -34,6 +35,7 @@ def get_post_list(request):
     serialized_post = PostSerializer(posts,many=True)  # Convert to JSON format
     return Response({'code': 200, 'data': serialized_post.data})
 
+#根据id获取帖子
 @api_view(['GET'])
 def get_post_by_id(request,id):
 
@@ -44,12 +46,14 @@ def get_post_by_id(request,id):
     serialized_post = PostSerializer(post)  # Convert to JSON format
     return Response({'code': 200, 'data': serialized_post.data})
 
+#获取帖子里的所有picture的urls
 @api_view(['GET'])
 def get_post_pic(request,id):
     pic_urls=PostPic.objects.filter(post=id)
     serialized_pics = PostPicSerializer(pic_urls,many=True)  # Convert to JSON format
     return Response({'code': 200, 'data': serialized_pics.data})
 
+#获取帖子里的所有评论
 @api_view(['GET'])
 def get_comments(request,id):
     comments=Comment.objects.filter(post_id=id)
@@ -58,6 +62,7 @@ def get_comments(request,id):
     serialized_comments=CommentSerializer(comments,many=True)
     return Response({'code':200,'data':serialized_comments.data})
 
+#发布评论
 @permission_classes([IsAuthenticated])
 @api_view(['POST'])
 def comment(request):
@@ -106,3 +111,63 @@ def publish(request):
             print("something wrong with upload")
     return Response({'code':200,'urls':saved_files})
 
+#点赞
+@api_view(['post'])
+@permission_classes([IsAuthenticated])
+def like(request):
+    userId=request.data.get('from-user')
+    postOwnerId=request.data.get('to-id')
+    postId=request.data.get('post-id')
+    #创建Like记录
+    like=Like.objects.create(from_user=userId,to_id=postOwnerId,post_id=postId)
+    
+    try:
+        #Post记录点赞加1
+        post=Post.objects.get(id=postId)
+        post.likes+=1
+        post.save()
+        like.save()
+        return Response({'code':200,'message':"'like' request has been handled"})
+    except:
+        return Response({'code':300,'message':"'like' request has failed"}) 
+    
+
+
+
+#取消点赞
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def cancel_like(request):
+    userId=request.data.get('from-user')
+
+    postId=request.data.get('post-id')
+    #获取对应Like记录
+    like=Like.objects.get(from_user=userId,post_id=postId)
+    try:
+        #修改Post记录 点赞-1
+        post=Post.objects.get(id=postId)
+        post.likes-=1
+        post.save()
+        like.delete()
+        return Response({'code':200,'message':"'like' has been canceled"})
+    except:
+        return Response({'code':300,'message':"'like' request has failed"})  
+
+#判断当前用户是否赞过某条帖子
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def hasLiked(request):
+    username=request.data.get('from-user')
+    post_id=request.data.get('post-id')
+    try:
+        like=Like.objects.get(from_user=username,post_id=post_id)
+        #print(like)
+        return Response({'code':200,'data':{
+            'message':"current user has liked this post",
+            "code":1
+        }})
+    except:
+       return Response({'code':200,'data':{
+            'message':"current user has not liked this post",
+            "code":0
+        }}) 

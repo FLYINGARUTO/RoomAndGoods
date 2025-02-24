@@ -25,7 +25,7 @@ function loginForm(){
     if(valid){
       post('api/post/login/',{username:form.username,password:form.password},(res)=>{
         console.log("?",res)
-        
+        localStorage.setItem('loginedUser',res.loginedUser) 
         if(res.token){
           localStorage.setItem('accessToken',res.token.access)
           localStorage.setItem('refreshToken',res.token.refresh)

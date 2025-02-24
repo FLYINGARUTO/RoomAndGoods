@@ -29,11 +29,19 @@
               
           </div>
           <div class="reaction-icons">
-              <text class="reaction-icon">👍{{postData.likes}}</text>
+            <div> 
+              <img :src="likeIconUrl" class="reaction-icon" @click="like">
+              <text >{{postData.likes}}</text>
+            </div>
+            <div> 
+              <img :src="starIconUrl" class="reaction-icon">
+              <text >{{postData.stars}}</text>
+            </div>
+            <div> 
+              <img :src="iconURL.comment" class="reaction-icon">
+              <text >{{postData.comments}}</text>
+            </div>
 
-              <text class="reaction-icon">⭐{{postData.stars}}</text>
-
-              <text class="reaction-icon">💬{{postData.comments}}</text>
           </div>
           
             
@@ -76,13 +84,17 @@
   </template>
   
   <script setup>
-    import { ref } from 'vue';
+    import { reactive, ref } from 'vue';
     import { ElAlert, ElAvatar, ElButton, ElDivider, ElIcon } from 'element-plus';
     import { onMounted } from 'vue';
     import {get,post,internalPost} from '@/net/index'
     import router from '@/routers/route'
     import { useRoute } from 'vue-router';
-    
+    import likeImg from '@/assets/like.png'
+    import likedImg from '@/assets/liked.png'
+    import starImg from '@/assets/star.png'
+    import starredImg from '@/assets/starred.png'
+    import commentImg from '@/assets/comment.png'
     const postData = ref({ });
     const route = useRoute()
     const photoUrls=ref([])
@@ -90,7 +102,22 @@
     const inputValue=ref('')
     const commentValue=ref('')
     const showInput=ref(false)
+    const iconURL=reactive({
+      like: likeImg,
+      liked: likedImg,
+      star: starImg,
+      starred: starredImg,
+      comment: commentImg
+    })
+    const likeIconUrl=ref(iconURL.like)
+    const starIconUrl=ref(iconURL.star)
+    const loginedUser=ref('')
+    const status=reactive({
+      like:0,
+      star:0
+    })
     onMounted(()=>{
+        loginedUser.value=localStorage.getItem('loginedUser')
         console.log(route.params)
         const id=route.params.id;
         get(`/api/get/post/${id}`,(res)=>{
@@ -103,7 +130,20 @@
               comments.value=res
               // console.log(res)
             })
+            post('/api/post/like-or-not/',{
+              'from-user':loginedUser.value,
+              'post-id':postData.value.id
+            },(res)=>{
+              console.log("like-or-not:",res)
+              if(res.code==1){
+                status.like=1
+                likeIconUrl.value=iconURL.liked
+              }
+                
+            })
         })
+
+        
      
     })
 
@@ -112,6 +152,8 @@
       showInput.value=true
 
     }
+
+    //confirm to send messgae
     const inputBoxYes=()=>{
       if(localStorage.getItem("accessToken")!=null)
         post('api/post/send-msg/',{
@@ -143,6 +185,30 @@
         alert('please login first')
       }
     }
+    const like=()=>{
+      if(status.like==0){
+        post('api/post/like/',{
+          'from-user':loginedUser.value,
+          'to-id' : postData.value.publisher_id,
+          'post-id': postData.value.id
+        },(res)=>{
+          console.log(res)
+          status.like=1
+          likeIconUrl.value=iconURL.liked
+          postData.value.likes+=1
+        })
+      }else{
+        post('api/post/cancel-like/',{
+          'from-user':loginedUser.value,
+          'post-id': postData.value.id
+        },(res)=>{
+          console.log(res)
+          status.like=0
+          likeIconUrl.value=iconURL.like
+          postData.value.likes-=1
+        })
+    }
+  }
   </script>
   
   <style scoped>
@@ -228,18 +294,20 @@
 }
 /* 让 reaction-icons 右对齐 */
 .reaction-icons {
-
+  margin: 5px 0;;
   font-size: 16px;
   display: flex;
   justify-content: space-between;
-
-  width: 60%;
+  
+  width: 40%;
   /* gap: 30px; */
   align-self:flex-end;
 }
 .reaction-icon{
 
-  border-radius: 15px;
+  width: 20px;
+  height: 20px;
+
 
 }
 .comment-list {

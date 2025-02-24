@@ -37,6 +37,7 @@ class User(models.Model):
 class Post(models.Model):
     id = models.AutoField(primary_key=True)  # 自增主键
     publisher_id = models.IntegerField()  # 发布者 ID，非空
+    publisher = models.CharField(max_length=255)
     title = models.CharField(max_length=255)  # 标题，非空
     details = models.CharField(max_length=255)  # 详细描述，非空
     views = models.IntegerField(default=0)  # 浏览量，默认为 0
@@ -76,7 +77,7 @@ class Comment(models.Model):
 
 class Like(models.Model):
     id = models.AutoField(primary_key=True)  # 自增主键
-    from_id = models.IntegerField()  # 点赞用户 ID，非空
+    from_user = models.CharField(max_length=255)  # 点赞用户 ID，非空
     to_id = models.IntegerField()  # 被点赞用户 ID，非空
     post_id = models.IntegerField()  # 被点赞的帖子 ID，非空
     created_time = models.DateTimeField(auto_now_add=True)  # 点赞时间，自动记录
@@ -85,10 +86,10 @@ class Like(models.Model):
         db_table = 'like'  # 数据库表名为 like
         verbose_name = 'Like'  # Django 后台单数显示为 Like
         verbose_name_plural = 'Likes'  # Django 后台复数显示为 Likes
-        unique_together = ('from_id', 'post_id')  # 防止同一用户对同一帖子重复点赞
+        unique_together = ('from_user', 'post_id')  # 防止同一用户对同一帖子重复点赞
 
     def __str__(self):
-        return f'User {self.from_id} liked Post {self.post_id}'
+        return f'User {self.from_user} liked Post {self.post_id}'
 
 
 class Collect(models.Model):
