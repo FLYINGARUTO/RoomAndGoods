@@ -71,7 +71,12 @@ def comment(request):
     from_user = request.data.get('from-user')
     to_id = request.data.get('to-id')
     post_id = request.data.get('post-id')
+    #创建Comment记录
     commentObj=Comment.objects.create(from_user=from_user,to_id=to_id,post_id=post_id,comment=comment)
+    #更新Post记录
+    post=Post.objects.get(id=post_id)
+    post.comments+=1
+    post.save()
     commentObj.save()
     return Response({'code':200,'message':"Comment sent"})
 
@@ -92,7 +97,8 @@ def publish(request):
     title=request.data.get('title')
     details=request.data.get('details')
     type=request.data.get('type')
-    post=Post(publisher_id=1,title=title,details=details,category=type)
+    username=request.data.get('username')
+    post=Post(publisher=username,title=title,details=details,category=type)
     post.save()
     #上传文件
     files=request.FILES.getlist('photos')

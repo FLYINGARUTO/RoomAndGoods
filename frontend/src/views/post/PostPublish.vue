@@ -72,6 +72,7 @@ import router from "@/routers/route";
       formData.append("title", form.value.title);
       formData.append("type", form.value.type);
       formData.append("details", form.value.details);
+      formData.append("username",localStorage.getItem('loginedUser'))
     
       // Append each file to FormData
       photoFiles.value.forEach((file, index) => {

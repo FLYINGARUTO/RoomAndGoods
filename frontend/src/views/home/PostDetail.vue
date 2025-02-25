@@ -3,13 +3,15 @@
       <div class="post-card">
                 <!-- User Info Section -->
         <div class="user-info">
-          <el-avatar >
-            <img class="avatar" src="../../assets/qqlogo.png">
-          </el-avatar>
-          <div>
-            <p>{{ postData.create_time }}</p>
+          <div style="display: flex;align-items: center;gap: 20px;"> 
+            <el-avatar >
+              <img class="avatar" src="../../assets/qqlogo.png">
+            </el-avatar>
+            <text style="font-weight: bold;font-size: 16px;">  {{postData.publisher }}</text>
           </div>
-          <el-button type="info" class="message-btn" @click="openInputBox">Message</el-button>
+          
+          
+          <el-button type="info"  @click="openInputBox">Message</el-button>
         </div>
         
         <el-divider></el-divider>
@@ -28,21 +30,27 @@
             </div>
               
           </div>
-          <div class="reaction-icons">
-            <div> 
-              <img :src="likeIconUrl" class="reaction-icon" @click="like">
-              <text >{{postData.likes}}</text>
-            </div>
-            <div> 
-              <img :src="starIconUrl" class="reaction-icon" @click="star">
-              <text >{{postData.stars}}</text>
-            </div>
-            <div> 
-              <img :src="iconURL.comment" class="reaction-icon">
-              <text >{{postData.comments}}</text>
-            </div>
+          <div class="bottom-bar">
+              <div>
+                <p>{{ postData.create_time }}</p>
+              </div>
+              <div class="reaction-icons">
+                <div> 
+                  <img :src="likeIconUrl" class="reaction-icon" @click="like">
+                  <text >{{postData.likes}}</text>
+                </div>
+                <div> 
+                  <img :src="starIconUrl" class="reaction-icon" @click="star">
+                  <text >{{postData.stars}}</text>
+                </div>
+                <div> 
+                  <img :src="iconURL.comment" class="reaction-icon">
+                  <text >{{postData.comments}}</text>
+                </div>
 
+              </div>
           </div>
+          
           
             
          
@@ -267,6 +275,7 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  padding: 0 5px;
 }
 
 /* 头像 */
@@ -278,11 +287,12 @@
   border: 1px solid black;
   padding: 10px;
   border-radius: 50%;
+
 }
 
 /* 让 post-content 占满 */
 .post-content {
-    margin: 20px 0;
+    margin: 10px 0;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -354,6 +364,14 @@
     margin-bottom: 10px;
     width: 100%;
     height: 80%;
+  }
+
+  .bottom-bar{
+    display: flex; 
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0 5px;
   }
   </style>
   
