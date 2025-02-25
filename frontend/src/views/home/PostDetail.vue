@@ -34,7 +34,7 @@
               <text >{{postData.likes}}</text>
             </div>
             <div> 
-              <img :src="starIconUrl" class="reaction-icon">
+              <img :src="starIconUrl" class="reaction-icon" @click="star">
               <text >{{postData.stars}}</text>
             </div>
             <div> 
@@ -139,8 +139,18 @@
                 status.like=1
                 likeIconUrl.value=iconURL.liked
               }
-                
             })
+            post('/api/post/star-or-not/',{
+              'from-user':loginedUser.value,
+              'post-id':postData.value.id
+            },(res)=>{
+              console.log("star-or-not:",res)
+              if(res.code==1){
+                status.star=1
+                starIconUrl.value=iconURL.starred
+              }
+            })
+
         })
 
         
@@ -207,9 +217,33 @@
           likeIconUrl.value=iconURL.like
           postData.value.likes-=1
         })
+      }
     }
-  }
-  </script>
+    const star=()=>{
+      if(status.star==0){
+        post('api/post/star/',{
+          'from-user':loginedUser.value,
+          'to-id' : postData.value.publisher_id,
+          'post-id': postData.value.id
+        },(res)=>{
+          console.log(res)
+          status.star=1
+          starIconUrl.value=iconURL.starred
+          postData.value.stars+=1
+        })
+      }else{
+        post('api/post/cancel-star/',{
+          'from-user':loginedUser.value,
+          'post-id': postData.value.id
+        },(res)=>{
+          console.log(res)
+          status.star=0
+          starIconUrl.value=iconURL.star
+          postData.value.stars-=1
+        })
+      }
+    }
+</script>
   
   <style scoped>
 .post-container {

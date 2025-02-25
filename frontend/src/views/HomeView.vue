@@ -9,6 +9,7 @@ const logout=()=>{
   get('api/get/logout',()=>{
     localStorage.removeItem('accessToken')
     localStorage.removeItem('refreshToken')
+    localStorage.removeItem('loginedUser')
     router.push('/login')
   })
 

@@ -170,4 +170,67 @@ def hasLiked(request):
        return Response({'code':200,'data':{
             'message':"current user has not liked this post",
             "code":0
-        }}) 
+        }})
+       
+#star和collect都表示收藏
+#收藏
+@api_view(['post'])
+@permission_classes([IsAuthenticated])
+def star(request):
+    userId=request.data.get('from-user')
+    postOwnerId=request.data.get('to-id')
+    postId=request.data.get('post-id')
+    #创建Collect记录
+    star=Collect.objects.create(from_user=userId,to_id=postOwnerId,post_id=postId)
+    
+    try:
+        #Post记录点赞加1
+        post=Post.objects.get(id=postId)
+        post.stars+=1
+        post.save()
+        star.save()
+        return Response({'code':200,'message':"'star' request has been handled"})
+    except:
+        return Response({'code':300,'message':"'star' request has failed"}) 
+    
+
+
+
+#取消收藏
+#star和collect都表示收藏
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def cancel_star(request):
+    userId=request.data.get('from-user')
+
+    postId=request.data.get('post-id')
+    #获取对应Collect记录
+    star=Collect.objects.get(from_user=userId,post_id=postId)
+    try:
+        #修改Post记录 收藏-1
+        post=Post.objects.get(id=postId)
+        post.stars-=1
+        post.save()
+        star.delete()
+        return Response({'code':200,'message':"'like' has been canceled"})
+    except:
+        return Response({'code':300,'message':"'like' request has failed"})  
+    
+#判断当前用户是否收藏过某条帖子
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def hasStarred(request):
+    username=request.data.get('from-user')
+    post_id=request.data.get('post-id')
+    try:
+        star=Collect.objects.get(from_user=username,post_id=post_id)
+        #print(like)
+        return Response({'code':200,'data':{
+            'message':"current user has starred this post",
+            "code":1
+        }})
+    except:
+       return Response({'code':200,'data':{
+            'message':"current user has not starred this post",
+            "code":0
+        }})

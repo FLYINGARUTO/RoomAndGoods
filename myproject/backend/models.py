@@ -95,7 +95,7 @@ class Like(models.Model):
 
 class Collect(models.Model):
     id = models.AutoField(primary_key=True)  # 自增主键
-    from_id = models.IntegerField()  # 收藏用户 ID，非空
+    from_user = models.CharField(max_length=255)  # 收藏用户 ID，非空
     to_id = models.IntegerField()  # 被收藏用户 ID，非空
     post_id = models.IntegerField()  # 被收藏的帖子 ID，非空
     created_time = models.DateTimeField(auto_now_add=True)  # 收藏时间，自动记录
@@ -104,10 +104,10 @@ class Collect(models.Model):
         db_table = 'collect'  # 数据库表名为 collect
         verbose_name = 'Collect'  # Django 后台单数显示为 Collect
         verbose_name_plural = 'Collects'  # Django 后台复数显示为 Collects
-        unique_together = ('from_id', 'post_id')  # 防止同一用户对同一帖子重复收藏
+        unique_together = ('from_user', 'post_id')  # 防止同一用户对同一帖子重复收藏
 
     def __str__(self):
-        return f'User {self.from_id} collected Post {self.post_id}'
+        return f'User {self.from_user} collected Post {self.post_id}'
 
 
 class Message(models.Model):

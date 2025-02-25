@@ -12,6 +12,10 @@ urlpatterns = [
     path('api/post/comment/',comment),
     path('api/post/like/',like),
     path('api/post/cancel-like/',cancel_like),
-    path('api/post/like-or-not/',hasLiked)
+    path('api/post/like-or-not/',hasLiked),
+    path('api/post/star/',star),
+    path('api/post/cancel-star/',cancel_star),
+    path('api/post/star-or-not/',hasStarred),
+     
     
 ]
