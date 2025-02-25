@@ -34,12 +34,14 @@ const changeCategory=(category)=>{
        
         
       </div>
-  
-      <router-view v-slot="{Component}">
-        <transition name="el-zoom-in-center" mode="out-in" >
-          <component :is="Component" class="post-container"/>
-        </transition>
-      </router-view>
+      <div class="post-container"> 
+        <router-view v-slot="{Component}">
+          <transition name="el-zoom-in-center" mode="out-in" >
+            <component :is="Component"/>
+          </transition>
+        </router-view>
+      </div> 
+      
 
     </div>
   </template>
@@ -50,10 +52,12 @@ const changeCategory=(category)=>{
     display: flex;
     height: 100vh;
     width: 100%;  /* 确保撑满整个屏幕 */
-    max-width: 1200px;
-    margin: 0 auto;
+    
+   
     overflow: hidden;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
+    
+    justify-content: center;  /* ✅ 确保 sidebar 靠左 */
   }
   
   /* 🌟 让 sidebar 贴紧左边 */
@@ -107,10 +111,30 @@ const changeCategory=(category)=>{
 }
 
 .post-container {
-    width: 100%; /* ✅ 让帖子列表填充整个 `content` */
+    
     max-width: 800px; /* ✅ 限制最大宽度 */
     min-width: 600px;
-    margin: 0 auto; /* ✅ 居中 */
+    width: 100%;
+    
+    flex-grow: 1;  /* 让内容区域填充剩余空间 */
+    overflow-y: auto;
+    align-items: center;  /* 水平居中 */
+ 
+}
+.post-container1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;  /* ✅ 让子元素居中 */
+    justify-content: flex-start; /* ✅ 从顶部开始排列 */
+    
+    max-width: 800px; /* ✅ 限制最大宽度 */
+    min-width: 600px;
+    width: calc(100% - 200px); /* ✅ 让内容填充 sidebar 之外的所有空间 */
+    
+    flex-grow: 1;
+    height: 100vh; /* ✅ 让内容填充整个视口高度 */
+    margin-left: 200px; /* ✅ 避免 sidebar 遮挡 */
+    overflow-y: auto; /* ✅ 允许滚动 */
 }
   </style>
   

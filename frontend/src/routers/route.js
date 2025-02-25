@@ -31,6 +31,10 @@ const router =createRouter({
             path:'/login',
             name:'login-page',
             component:()=>import('@/views/identity/LoginPage.vue')
+        },{
+            path:'/register',
+            name:'register-page',
+            component:()=>import('@/views/identity/RegisterPage.vue')
         }
         
     ]
