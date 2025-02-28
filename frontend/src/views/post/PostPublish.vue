@@ -117,16 +117,19 @@ import router from "@/routers/route";
   
   <style scoped>
   .post-form {
+    align-content: center;
     display: flex;
     flex-direction: column;
-    width: 700px;
+    width: 1200px;
+    height:100vh;
     max-width: 100%;
-    margin: 30px auto;
+
     gap: 10px;
     background: white;
-    padding: 50px;
+    padding: 60px 100px;
     border-radius: 10px;
     border: 1px solid #ddd;
+    overflow: auto;
   }
   
   .radio-group {
@@ -137,7 +140,7 @@ import router from "@/routers/route";
   .photo-grid {
     display: grid;
     /* grid-template-columns: repeat(3, 1fr); */
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: repeat(3,1fr);
     align-items: center;
     justify-content: center;
     gap: 10px;
@@ -146,7 +149,7 @@ import router from "@/routers/route";
   
   .photo-box {
     width: 100%;
-    aspect-ratio: 1/1;
+    aspect-ratio: 1;
     border: 1px solid black;
     border-radius: 10px;
     display:flex;
@@ -162,7 +165,7 @@ import router from "@/routers/route";
 
     width: 100%;
     height: 100%;
-    opacity: 0.5;
+    opacity: 0;
     cursor: pointer;
 }
 

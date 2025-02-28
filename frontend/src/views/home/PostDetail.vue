@@ -257,11 +257,11 @@
 .post-container {
     overflow-y: auto;
     flex-direction: column;
-    padding: 10px;
+    padding: 5px;
     width: 100%;
-    max-width: 800px;  /* Increase this value */
-    min-width: 600px;
-    margin: 30px auto;  /*Center the content */
+    max-width: 1200px;  /* Increase this value */
+    min-width: 1000px;
+    margin:10px;
 
     background: white;
     padding: 15px;
@@ -305,10 +305,11 @@
 /* 让照片区域撑满 */
 .photo-box {
   padding: 5px;
-  flex-wrap: wrap;  
+  flex-wrap: nowrap;  
   width: 100%;
   height: 500px;
-  
+  overflow-x: auto;   /* ✅ 允许横向滚动 */
+  overflow-y: hidden; /* ✅ 防止垂直滚动 */
   border: 1px solid black;
   border-radius: 5px;
   display: flex;
@@ -318,8 +319,8 @@
 
 /* 每张图片的容器 */
 .image-wrapper {
-  width: 150px;   /* 固定盒子宽度 */
-  height: 150px;  /* 固定盒子高度 */
+  width: 450px;   /* 固定盒子宽度 */
+  height: 450px;  /* 固定盒子高度 */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -328,6 +329,7 @@
   overflow: hidden;
   border: 1px solid #ccc;
   border-radius: 5px;
+  flex-shrink: 0; /* ✅ 防止图片被压缩 */
 }
 
 /* 让图片保持原始比例 */

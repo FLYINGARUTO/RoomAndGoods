@@ -98,9 +98,11 @@
     flex-direction: column;
     padding: 10px;
     max-width: 100%;
+    height: 100vh;
     width: 100%;
     display: flex;
     justify-content: center;
+    overflow-y: auto;
   }
   
   /* Banner */
