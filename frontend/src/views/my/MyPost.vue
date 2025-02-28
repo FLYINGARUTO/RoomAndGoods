@@ -5,9 +5,8 @@
     import router from "@/routers/route"
     import { usePostStore } from '@/store/postStore';
     const postStore =usePostStore()
-    const username=localStorage.getItem('loginedUser')
     onMounted(() => {
-        get("/api/get/post-list",(res)=>{
+        post("/api/post/get-my-posts/",{"username":localStorage.getItem('loginedUser')},(res)=>{
             console.log(res)
             posts.value=res.map(item=>({
               id: item.id,
@@ -40,24 +39,16 @@
     const goToDetail=(postId)=>{
         router.push(`/post/${postId}`)
     }
-    const toPost=()=>{
-      if(!localStorage.getItem('accessToken')){
-        alert('please login first')
-      }else{
-        router.push('/post/new')
-      }
-    }
+
 
 </script>
 <template>
       
     <div class="main-content">
-      <el-divider v-if="username!=null">{{ "Welcome,"+ username}}</el-divider>
-      <div class="banner">
-        <text style="font-weight: bold;">投放广告联系abc@abc.com</text>
-      </div>
-
-       
+      
+      <el-divider></el-divider>
+     <h1 style="margin:0px auto">My Posts</h1>
+     <el-divider></el-divider>
       <div class="sort-bar">
         <div>
           <label style="margin: 15px;font-weight: 600;">Sort by</label>
@@ -69,7 +60,6 @@
                       class="btn">time</el-button>
         </div>
         
-        <el-button type="success" class="btn" @click="toPost">Post</el-button>
       </div>
 
       

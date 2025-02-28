@@ -12,12 +12,16 @@ class PostSerializer(serializers.ModelSerializer):
 class PostPicSerializer(serializers.ModelSerializer):
     class Meta:
         model = PostPic
-        fields = '__all__'  # or specify only needed fields, e.g., ['id', 'title', 'content']
+        fields = '__all__'  
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = '__all__'  # or specify only needed fields, e.g., ['id', 'title', 'content']
+        fields = '__all__' 
 class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
-        fields = '__all__'  # or specify only needed fields, e.g., ['id', 'title', 'content']
+        fields = '__all__'  
+class LikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Like
+        fields = '__all__'  

@@ -5,6 +5,8 @@ import {usePostStore} from '../store/postStore'
 import { storeToRefs } from "pinia";
 const postStore = usePostStore()
 const { selectedCategory } = storeToRefs(postStore); 
+const username=localStorage.getItem('loginedUser')
+
 const logout=()=>{
   get('api/get/logout',()=>{
     localStorage.removeItem('accessToken')
@@ -26,14 +28,14 @@ const changeCategory=(category)=>{
         <label class="sidebar-btn" :class="{ active: selectedCategory === 'All'}" @click="changeCategory('All')">All</label>
         <label class="sidebar-btn" :class="{ active: selectedCategory === 'Used'}" @click="changeCategory('Used')">Used</label>
         <label class="sidebar-btn" :class="{ active: selectedCategory === 'Sublet'}" @click="changeCategory('Sublet')">Sublet</label>
+        
         <div class="side-bottom"> 
-          <label class="sidebar-btn">My</label>
+        
+          <label v-if="username!=null" class="sidebar-btn" @click="router.push('/my')">My</label>
           <label class="sidebar-btn logout" @click="logout">Logout</label>
         </div>
-
-       
-        
       </div>
+      
       <div class="post-container"> 
         <router-view v-slot="{Component}">
           <transition name="el-zoom-in-center" mode="out-in" >
@@ -52,11 +54,10 @@ const changeCategory=(category)=>{
     display: flex;
     flex-direction: column;
     height: 100vh;
-    width: 100vh;  /* 确保撑满整个屏幕 */
-    
+    width: 100vw;  /* 确保撑满整个屏幕 */
     margin-bottom: 100px;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    
+    align-items: center; 
     justify-content: center; 
 
   }
@@ -67,6 +68,7 @@ const changeCategory=(category)=>{
     margin:100px 10px 0px 10px;
     /* left: 0px; */
     height: 200px;
+    width:100%;
     max-width: 1200px; /* ✅ 限制最大宽度 */
     min-width: 1000px;
   

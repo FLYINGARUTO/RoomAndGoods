@@ -19,11 +19,28 @@ const router =createRouter({
                     path:'/post/:id',
                     name:"home-post-detail",
                     props:true,
-                    component:()=>import('@/views/home/PostDetail.vue')
+                    component:()=>import('@/views/post/PostDetail.vue')
                 },{
                     path:'/post/new',
                     name:"home-post-new",
                     component:()=>import('@/views/post/PostPublish.vue')
+                },{
+                    path:'/my',
+                    name:'my-page',
+                    component:()=>import('@/views/my/My.vue')
+                },
+                {
+                    path:'/my/like',
+                    name:"my-liked-post",
+                    component:()=>import('@/views/my/MyLike.vue')
+                },{
+                    path:'/my/star',
+                    name:"my-starred-post",
+                    component:()=>import('@/views/my/MyStar.vue')
+                },{
+                    path:'/my/post',
+                    name:'my-own-post',
+                    component:()=>import('@/views/my/MyPost.vue')
                 }
 
             ]

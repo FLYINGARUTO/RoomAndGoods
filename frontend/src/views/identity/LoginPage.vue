@@ -1,5 +1,5 @@
 <script setup>
-import {reactive,ref} from "vue";
+import {onMounted, reactive,ref} from "vue";
 import {User,Lock} from '@element-plus/icons-vue'
 // import {login} from "../../net/index.js";
 import router from "@/routers/route";
@@ -19,7 +19,11 @@ const rule={
   password:[
     {required: true,message:"password cannot left blank"}
   ]}
-
+onMounted(()=>{
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('refreshToken')
+    localStorage.removeItem('loginedUser')
+})
 function loginForm(){
   formRef.value.validate((valid)=>{
     if(valid){
