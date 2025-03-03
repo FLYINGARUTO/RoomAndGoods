@@ -180,5 +180,8 @@ AWS_S3_REGION_NAME = "eu-north-1"  # Change to your AWS region
 AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com"
 
 # Use S3 for media files
-DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
+# DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+# MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/"
+# 本地存储路径
+MEDIA_URL = "/media/"  
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")  # 存放图片的本地路径

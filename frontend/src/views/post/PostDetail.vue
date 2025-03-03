@@ -26,7 +26,7 @@
           <!-- Photo Box -->
           <div class="photo-box">
             <div v-for="(photo,index) in photoUrls" :key="index" class="image-wrapper">
-              <img :src="photo.photo_url" alt="post image"/> 
+              <img :src="'http://127.0.0.1:8000' +photo.photo_url" alt="post image"/> 
             </div>
               
           </div>
@@ -190,7 +190,7 @@
       if(localStorage.getItem("accessToken")!=null)
         post('api/post/comment/',{
           "from-user":loginedUser.value, //之后这里要动态的获取当前登录用户的id
-          "to-id":postData.value.publisher_id,
+          "to-user":postData.value.publisher,
           "comment":commentValue.value,
           "post-id":postData.value.id
         },
@@ -207,7 +207,7 @@
       if(status.like==0){
         post('api/post/like/',{
           'from-user':loginedUser.value,
-          'to-id' : postData.value.publisher_id,
+          'to-user' : postData.value.publisher,
           'post-id': postData.value.id
         },(res)=>{
           console.log(res)
@@ -231,7 +231,7 @@
       if(status.star==0){
         post('api/post/star/',{
           'from-user':loginedUser.value,
-          'to-id' : postData.value.publisher_id,
+          'to-user' : postData.value.publisher,
           'post-id': postData.value.id
         },(res)=>{
           console.log(res)
@@ -340,21 +340,27 @@
 }
 /* 让 reaction-icons 右对齐 */
 .reaction-icons {
-  margin: 5px 0;;
-  font-size: 16px;
+
+  margin-right: 20px;
+
   display: flex;
   justify-content: space-between;
-  
-  width: 40%;
+  font-size: 18px;
+  width: 20%;
   /* gap: 30px; */
+  align-items: center;
   align-self:flex-end;
+}
+.reaction-icons div{
+  display: flex;              /* 让每个图标+数字内部横向排列 */
+  align-items: center;        /* 确保图标和数字垂直对齐 */
+  gap: 5px; 
 }
 .reaction-icon{
 
   width: 20px;
   height: 20px;
-
-
+  cursor: pointer;
 }
 .comment-list {
     flex: 1;
@@ -373,6 +379,7 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    margin:10px;
     padding: 0 5px;
   }
   </style>

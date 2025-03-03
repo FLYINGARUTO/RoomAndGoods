@@ -39,6 +39,14 @@
     const goToDetail=(postId)=>{
         router.push(`/post/${postId}`)
     }
+    const delete_post=(id)=>{
+        post('api/post/delete-post/',{
+          'post-id':id
+        },(res)=>{
+            console.log(res.message)
+            router.go(0) 
+        })
+    }
 
 
 </script>
@@ -68,7 +76,11 @@
               @click="goToDetail(post.id)">
 
           <h3 style="font-weight: bold;">{{ post.title }}</h3>
-          <p style="margin-top: 5px;">{{ post.details }}</p>
+          <div class="post-manage">
+            <p style="margin-top: 5px;">{{ post.details }}</p>
+            <button @click.stop="delete_post(post.id)" style="cursor: pointer;">delete</button>
+          </div>
+          
           <div style="margin-top: 5px;justify-content: space-between; display: flex; color: darkgray;">
             <p>{{ post.views }} views</p> 
             <p>{{ post.date }}</p>
@@ -138,5 +150,13 @@
     margin-bottom: 10px;
   }
 
+  .post-manage{
+    display: flex;
+    justify-content: space-between;
+  }
+  .post-manage button{
+    font-size: 16px;
+    border-radius: 3px;
+  } 
   </style>
   

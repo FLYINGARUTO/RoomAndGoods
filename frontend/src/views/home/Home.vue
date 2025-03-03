@@ -4,7 +4,15 @@
     import {get,post} from '@/net/index'
     import router from "@/routers/route"
     import { usePostStore } from '@/store/postStore';
-    const postStore =usePostStore()
+    import {
+      ArrowDown,
+      Check,
+      CircleCheck,
+      CirclePlus,
+      CirclePlusFilled,
+      Plus,
+    } from '@element-plus/icons-vue'
+    // const postStore =usePostStore()
     const username=localStorage.getItem('loginedUser')
     onMounted(() => {
         get("/api/get/post-list",(res)=>{
@@ -21,11 +29,12 @@
           })
 
     })
+    const selectedCategory= ref("all")
     //根据分类过滤
     const filteredPosts = computed(() =>
-            postStore.selectedCategory === "All"
+            selectedCategory.value === "all"
                 ? posts.value
-                : posts.value.filter(post => post.category === postStore.selectedCategory)
+                : posts.value.filter(post => post.category === selectedCategory.value)
         );
     // Sample post data
     const posts = ref([]);
@@ -59,17 +68,27 @@
 
        
       <div class="sort-bar">
-        <div>
-          <label style="margin: 15px;font-weight: 600;">Sort by</label>
-          <el-button @click="sortBy = 'views'"
-                     :type="sortBy === 'views' ? 'primary' : ''"
-                     class="btn">views</el-button>
-          <el-button @click="sortBy = 'time'" 
-                      :type="sortBy === 'time' ? 'primary' : ''"
-                      class="btn">time</el-button>
+        <div style="width: 30%;">
+          <el-button @click="selectedCategory='all'" class="sidebar-btn" :class="{active: selectedCategory=='all'}">All</el-button>
+          <el-button @click="selectedCategory='Used'" class="sidebar-btn" :class="{active: selectedCategory=='Used'}" >Used Goods</el-button>
+          <el-button @click="selectedCategory='Sublet'" class="sidebar-btn" :class="{active: selectedCategory=='Sublet'}">Sublet</el-button>
+          
+        </div>
+        <div> 
+          <el-dropdown trigger="click">
+            <span class="el-dropdown-link" >
+              Sort by<el-icon ><arrow-down /></el-icon>
+            </span>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item @click="sortBy='views'">Views</el-dropdown-item>
+                <el-dropdown-item @click="sortBy='times'">Time</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+          <el-button type="success" class="btn" @click="toPost">Post</el-button>
         </div>
         
-        <el-button type="success" class="btn" @click="toPost">Post</el-button>
       </div>
 
       
@@ -123,10 +142,11 @@
   /* Sorting Bar */
 .sort-bar {
   display: flex;
-  justify-content: space-between; /* ✅ 让第一个和最后一个元素分开 */
+  justify-content:space-between; /* ✅ 让第一个和最后一个元素分开 */
   align-items: center;
   width: 100%;
   margin-top: 10px;
+  padding: 10px 20px;
   
 }
 
@@ -134,7 +154,24 @@
   .sort-bar .el-button {
     margin-right: 10px;
   }
-  
+  .sidebar-btn {
+  text-align: center;
+  background-color:white;
+  margin-left: 0px;
+  width: 100%; /* ✅ 统一按钮宽度 */
+  max-width:80px; /* ✅ 确保不会太宽 */
+  font-size: 14px;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-weight: 500;
+  border:1px solid darkgray;
+  border-radius: 5px;
+
+
+}
+.active{
+  background-color: #007bff;
+    color: white;
+}
   /* Post List */
   .post-list {
     overflow:auto;
@@ -142,11 +179,20 @@
     flex: 1;
   }
   .btn{
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    margin-left: 30px;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   }
   .post-card {
     margin-bottom: 10px;
   }
+  .el-dropdown-link {
+  
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  color:#007bff;
+  font-weight: bold;
 
+}
   </style>
   

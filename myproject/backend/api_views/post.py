@@ -6,6 +6,9 @@ from rest_framework.permissions import IsAuthenticated
 from ..serializer import *  # Import the serializer
 from datetime import datetime
 from ..utils.file import upload_to_s3
+import os
+from django.conf import settings
+from django.core.files.storage import default_storage
 @api_view(['GET'])
 def hello_world(request):
     # banner=Banner.objects.create(picture_url="/static/pic/1.png",admin_id=10)
@@ -70,10 +73,10 @@ def comment(request):
     print("request headers:",request.headers)
     comment = request.data.get('comment')
     from_user = request.data.get('from-user')
-    to_id = request.data.get('to-id')
+    to_user = request.data.get('to-user')
     post_id = request.data.get('post-id')
     #创建Comment记录
-    commentObj=Comment.objects.create(from_user=from_user,to_id=to_id,post_id=post_id,comment=comment)
+    commentObj=Comment.objects.create(from_user=from_user,to_user=to_user,post_id=post_id,comment=comment)
     #更新Post记录
     post=Post.objects.get(id=post_id)
     post.comments+=1
@@ -105,28 +108,50 @@ def publish(request):
     files=request.FILES.getlist('photos')
     saved_files=[]
     #遍历文件list
+    # for file in files:
+    #     #上传到S3，并返回url
+    #     url=upload_to_s3(file,settings.AWS_STORAGE_BUCKET_NAME)
+    #     print(url)
+    #     if url != '':
+    #         saved_files.append(url)
+    #         #创建帖子图片的数据库记录
+    #         pic=PostPic.objects.create(post=post,photo_url=url)
+    #         pic.save()
+    #     else:
+    #         print("something wrong with upload")
+    # return Response({'code':200,'urls':saved_files})
     for file in files:
-        #上传到S3，并返回url
-        url=upload_to_s3(file,settings.AWS_STORAGE_BUCKET_NAME)
-        print(url)
-        if url != '':
-            saved_files.append(url)
-            #创建帖子图片的数据库记录
-            pic=PostPic.objects.create(post=post,photo_url=url)
-            pic.save()
-        else:
-            print("something wrong with upload")
-    return Response({'code':200,'urls':saved_files})
+        # 定义本地存储路径
+        file_path = os.path.join('uploads', file.name)  # 存在 media/uploads/ 里
+        full_path = os.path.join(settings.MEDIA_ROOT, file_path)
+
+        # 确保目录存在
+        os.makedirs(os.path.dirname(full_path), exist_ok=True)
+
+        # 保存文件到本地
+        with open(full_path, 'wb+') as destination:
+            for chunk in file.chunks():
+                destination.write(chunk)
+
+        # 获取文件的 URL 供前端访问
+        url = settings.MEDIA_URL + file_path
+        saved_files.append(url)
+
+        # 创建帖子图片的数据库记录
+        pic = PostPic.objects.create(post=post, photo_url=url)
+        pic.save()
+
+    return Response({'code': 200, 'urls': saved_files})
 
 #点赞
 @api_view(['post'])
 @permission_classes([IsAuthenticated])
 def like(request):
     userId=request.data.get('from-user')
-    postOwnerId=request.data.get('to-id')
+    postOwner=request.data.get('to-user')
     postId=request.data.get('post-id')
     #创建Like记录
-    like=Like.objects.create(from_user=userId,to_id=postOwnerId,post_id=postId)
+    like=Like.objects.create(from_user=userId,to_user=postOwner,post_id=postId)
     
     try:
         #Post记录点赞加1
@@ -185,10 +210,10 @@ def hasLiked(request):
 @permission_classes([IsAuthenticated])
 def star(request):
     userId=request.data.get('from-user')
-    postOwnerId=request.data.get('to-id')
+    postOwner=request.data.get('to-user')
     postId=request.data.get('post-id')
     #创建Collect记录
-    star=Collect.objects.create(from_user=userId,to_id=postOwnerId,post_id=postId)
+    star=Collect.objects.create(from_user=userId,to_user=postOwner,post_id=postId)
     
     try:
         #Post记录点赞加1

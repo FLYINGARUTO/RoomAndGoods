@@ -63,7 +63,7 @@ class Comment(models.Model):
     from_id = models.IntegerField()  # 评论者 ID，非空
     from_user=models.CharField(max_length=255)
     post_id = models.IntegerField()  # 所属帖子 ID，非空
-    to_id = models.IntegerField()  # 被回复用户 ID，非空
+    to_user = models.CharField(max_length=255)  # 被回复用户
     comment = models.CharField(max_length=255)  # 评论内容，最大长度 255，非空
     read = models.IntegerField(default=0)  # 是否已读，默认为 0
     create_time=models.DateTimeField(auto_now_add=True) 
@@ -79,7 +79,7 @@ class Comment(models.Model):
 class Like(models.Model):
     id = models.AutoField(primary_key=True)  # 自增主键
     from_user = models.CharField(max_length=255)  # 点赞用户 ID，非空
-    to_id = models.IntegerField()  # 被点赞用户 ID，非空
+    to_user = models.CharField(max_length=255)  # 被点赞用户 ID，非空
     post_id = models.IntegerField()  # 被点赞的帖子 ID，非空
     created_time = models.DateTimeField(auto_now_add=True)  # 点赞时间，自动记录
 
@@ -96,7 +96,7 @@ class Like(models.Model):
 class Collect(models.Model):
     id = models.AutoField(primary_key=True)  # 自增主键
     from_user = models.CharField(max_length=255)  # 收藏用户 ID，非空
-    to_id = models.IntegerField()  # 被收藏用户 ID，非空
+    to_user = models.CharField(max_length=255)  # 被收藏用户 ID，非空
     post_id = models.IntegerField()  # 被收藏的帖子 ID，非空
     created_time = models.DateTimeField(auto_now_add=True)  # 收藏时间，自动记录
 

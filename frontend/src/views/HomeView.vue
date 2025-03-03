@@ -24,10 +24,11 @@ const changeCategory=(category)=>{
 <template>
     <div class="homepage">
       <!-- Sidebar -->
-      <div class="sidebar" > 
-        <label class="sidebar-btn" :class="{ active: selectedCategory === 'All'}" @click="changeCategory('All')">All</label>
+      <div class="sidebar" >
+        <label class="sidebar-btn" @click="router.push('/')">Home</label> 
+        <!-- <label class="sidebar-btn" :class="{ active: selectedCategory === 'All'}" >All</label>
         <label class="sidebar-btn" :class="{ active: selectedCategory === 'Used'}" @click="changeCategory('Used')">Used</label>
-        <label class="sidebar-btn" :class="{ active: selectedCategory === 'Sublet'}" @click="changeCategory('Sublet')">Sublet</label>
+        <label class="sidebar-btn" :class="{ active: selectedCategory === 'Sublet'}" @click="changeCategory('Sublet')">Sublet</label> -->
         
         <div class="side-bottom"> 
         
@@ -90,7 +91,7 @@ const changeCategory=(category)=>{
   font-weight: 500;
   border:1px solid darkgray;
   border-radius: 5px;
-
+  cursor: pointer;
 
 }
 
