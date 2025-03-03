@@ -87,7 +87,7 @@ import router from "@/routers/route";
           } 
       console.log("🚀 Final Request Headers:", JSON.stringify(headers, null, 2)); // ✅ 确保 headers 正确
 
-      internalPost("http://127.0.0.1:8000/api/post/publish/", formData,
+      internalPost("http://10.223.74.229:8000/api/post/publish/", formData,
           headers
         ,(response)=>{
           console.log("Upload Successful:", response);

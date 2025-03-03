@@ -26,7 +26,7 @@
           <!-- Photo Box -->
           <div class="photo-box">
             <div v-for="(photo,index) in photoUrls" :key="index" class="image-wrapper">
-              <img :src="'http://127.0.0.1:8000' +photo.photo_url" alt="post image"/> 
+              <img :src="'http://10.223.74.229:8000' +photo.photo_url" alt="post image"/> 
             </div>
               
           </div>

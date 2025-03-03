@@ -9,6 +9,7 @@ from ..utils.file import upload_to_s3
 import os
 from django.conf import settings
 from django.core.files.storage import default_storage
+import random
 @api_view(['GET'])
 def hello_world(request):
     # banner=Banner.objects.create(picture_url="/static/pic/1.png",admin_id=10)
@@ -121,6 +122,10 @@ def publish(request):
     #         print("something wrong with upload")
     # return Response({'code':200,'urls':saved_files})
     for file in files:
+        #生成独一无二的文件名 防止同名文件覆盖
+        pre,suf=file.name.split(".")
+        pre=pre+str(random.randint(1,100000))
+        file.name=pre+"."+suf
         # 定义本地存储路径
         file_path = os.path.join('uploads', file.name)  # 存在 media/uploads/ 里
         full_path = os.path.join(settings.MEDIA_ROOT, file_path)

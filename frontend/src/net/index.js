@@ -3,7 +3,8 @@ import {ElMessage} from "element-plus";
 import router from "../routers/route.js";
 const refreshItemName="refreshToken"
 const authItemName="accessToken"
-const API_BASE_URL="http://127.0.0.1:8000"
+// const API_BASE_URL="http://127.0.0.1:8000"
+const API_BASE_URL="http://10.223.74.229:8000"
 const defaultFailure=(message,code,url)=>{
     console.log(`请求地址：${url} ，状态码：${code} ，错误信息：${message}`)
     ElMessage.warning(message)
@@ -36,13 +37,15 @@ function internalPost(url,data,header,success,failure=defaultFailure,error=defau
                 {
                     if (err.response && err.response.status === 401) {
                     console.warn("🔄 Access token expired, trying to refresh...");
-                    const newToken = await refreshToken();
-                    if (newToken) {
-                        return internalPost(url, data, getTokenHeader(), success, failure, error);
-                    } else {
-                        ElMessage.error("身份验证失败，请重新登录！");
-                        router.push("/login"); // 重新跳转到登录页
-                    }
+                    ElMessage.error("身份验证失败，请重新登录！");
+                    router.push("/login"); // 重新跳转到登录页 
+                    // const newToken = await refreshToken();
+                    // if (newToken) {
+                    //     return internalPost(url, data, getTokenHeader(), success, failure, error);
+                    // } else {
+                    //     ElMessage.error("身份验证失败，请重新登录！");
+                    //     router.push("/login"); // 重新跳转到登录页
+                    // }
                     } else {
                         error(err);
                     }
@@ -63,13 +66,15 @@ function internalGet(url,header,success,failure=defaultFailure,error=defaultErro
             {
                 if (err.response && err.response.status === 401) {
                 console.warn("🔄 Access token expired, trying to refresh...");
-                const newToken = await refreshToken();
-                if (newToken) {
-                    return internalGet(url,getTokenHeader(), success, failure, error);
-                } else {
-                    ElMessage.error("身份验证失败，请重新登录！");
-                    router.push("/login"); // 重新跳转到登录页
-                }
+                ElMessage.error("身份验证失败，请重新登录！");
+                router.push("/login"); // 重新跳转到登录页
+                // const newToken = await refreshToken();
+                // if (newToken) {
+                //     return internalGet(url,getTokenHeader(), success, failure, error);
+                // } else {
+                //     ElMessage.error("身份验证失败，请重新登录！");
+                //     router.push("/login"); // 重新跳转到登录页
+                // }
                 } else {
                     error(err);
                 }
@@ -146,24 +151,24 @@ function getTokenHeader(){
 //         ElMessage.success("退出登录成功")
 //         success()
 //     },failure)
-async function refreshToken() {
-    try {
-        const refresh = localStorage.getItem("refreshToken");
-        if (!refresh) {
-            console.error("❌ No refresh token available.");
-            return null;
-        }
+// async function refreshToken() {
+//     try {
+//         const refresh = localStorage.getItem("refreshToken");
+//         if (!refresh) {
+//             console.error("❌ No refresh token available.");
+//             return null;
+//         }
 
-        const response = await axios.post(`${API_BASE_URL}/api/post/token/refresh/`, { refresh });
-        if (response.data.access) {
-            localStorage.setItem("accessToken", response.data.access);
-            console.log("✅ Token refreshed");
-            return response.data.access;
-        }
-    } catch (error) {
-        console.error("❌ Refresh token failed:", error);
-        return null;
-    }
-}
+//         const response = await axios.post(`${API_BASE_URL}/api/post/token/refresh/`, { refresh });
+//         if (response.data.access) {
+//             localStorage.setItem("accessToken", response.data.access);
+//             console.log("✅ Token refreshed");
+//             return response.data.access;
+//         }
+//     } catch (error) {
+//         console.error("❌ Refresh token failed:", error);
+//         return null;
+//     }
+// }
 // }
 export {get,post,internalPost }

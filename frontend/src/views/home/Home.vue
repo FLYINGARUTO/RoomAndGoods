@@ -122,7 +122,7 @@
     width: 100%;
     display: flex;
     justify-content: center;
-    overflow-y: auto;
+    overflow: auto;
   }
   
   /* Banner */

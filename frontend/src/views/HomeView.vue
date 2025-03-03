@@ -1,10 +1,17 @@
 <script setup>
 import router from '@/routers/route';
 import {get} from '@/net/index'
-import {usePostStore} from '../store/postStore'
-import { storeToRefs } from "pinia";
-const postStore = usePostStore()
-const { selectedCategory } = storeToRefs(postStore); 
+// import {usePostStore} from '../store/postStore'
+// import { storeToRefs } from "pinia";
+import { useRouter } from "vue-router";
+
+const   route = useRouter();
+
+const goBack = () => {
+  route.back(); // 返回上一页
+};
+// const postStore = usePostStore()
+// const { selectedCategory } = storeToRefs(postStore); 
 const username=localStorage.getItem('loginedUser')
 
 const logout=()=>{
@@ -44,7 +51,10 @@ const changeCategory=(category)=>{
           </transition>
         </router-view>
       </div> 
-      
+        <!-- 悬浮回退按钮 -->
+      <button class="floating-button" @click="goBack">
+        ⬅ Back
+      </button>
 
     </div>
   </template>
@@ -60,6 +70,8 @@ const changeCategory=(category)=>{
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     align-items: center; 
     justify-content: center; 
+    max-width: 1200px; /* ✅ 控制最大宽度 */
+    margin: 0 auto; /* ✅ 让 `.homepage` 居中 */
 
   }
   
@@ -71,13 +83,21 @@ const changeCategory=(category)=>{
     height: 200px;
     width:100%;
     max-width: 1200px; /* ✅ 限制最大宽度 */
-    min-width: 1000px;
+    min-width: unset;
   
     display: flex;
     flex-direction: row;
     border-radius: 10px;
     /* flex:1; */
 
+}
+.sidebar1 {
+  display: flex;
+  justify-content: center; /* ✅ 让按钮居中 */
+  align-items: center;
+  width: 100%;
+  max-width: 1000px;
+  margin: 20px auto; /* ✅ 居中 */
 }
 
 .sidebar-btn {
@@ -119,10 +139,10 @@ const changeCategory=(category)=>{
 .post-container {
     
     max-width: 1200px; /* ✅ 限制最大宽度 */
-    min-width: 1000px;
+    min-width: unset;
     width: 100%;
 
-    
+    margin: 0 auto;
     flex-grow: 1; 
 
     align-items: center;  /* 水平居中 */
@@ -143,6 +163,25 @@ const changeCategory=(category)=>{
     height: 100vh; /* ✅ 让内容填充整个视口高度 */
 
     overflow-y: auto; /* ✅ 允许滚动 */
+}
+/* 悬浮按钮样式 */
+.floating-button {
+  position: fixed;  /* ✅ 让按钮固定在页面上 */
+  bottom: 20px;     /* ✅ 距离底部 20px */
+  right: 30px;      /* ✅ 距离右侧 20px */
+  background-color: #007bff;  /* 按钮颜色 */
+  color: white; 
+  border: none;
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);font-family: Verdana, Geneva, Tahoma, sans-serif;
+  /* transition: background 0.3s ease; */
+}
+
+.floating-button:hover {
+  background-color: #0056b3;
 }
   </style>
   
