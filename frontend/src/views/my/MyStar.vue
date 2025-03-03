@@ -3,8 +3,8 @@
     import { ref,computed} from 'vue';
     import {get,post} from '@/net/index'
     import router from "@/routers/route"
-    import { usePostStore } from '@/store/postStore';
-    const postStore =usePostStore()
+    // import { usePostStore } from '@/store/postStore';
+    // const postStore =usePostStore()
     onMounted(() => {
         post("/api/post/get-starred-posts/",{"username":localStorage.getItem('loginedUser')},(res)=>{
             console.log(res)
@@ -21,11 +21,13 @@
 
     })
     //根据分类过滤
-    const filteredPosts = computed(() =>
-            postStore.selectedCategory === "All"
-                ? posts.value
-                : posts.value.filter(post => post.category === postStore.selectedCategory)
-        );
+    
+    // const filteredPosts = computed(() =>
+    //         postStore.selectedCategory === "All"
+    //             ? posts.value
+    //             : posts.value.filter(post => post.category === postStore.selectedCategory)
+    //     );
+      
     // Sample post data
     const posts = ref([]);
 
@@ -33,7 +35,7 @@
 
     // Sorting logic
     const sortedPosts = computed(() => {
-      return [...filteredPosts.value].sort((a, b) => (sortBy.value === 'views' ? b.views - a.views : new Date(b.date) - new Date(a.date)));
+      return [...posts.value].sort((a, b) => (sortBy.value === 'views' ? b.views - a.views : new Date(b.date) - new Date(a.date)));
     });
 
     const goToDetail=(postId)=>{

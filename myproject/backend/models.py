@@ -112,10 +112,11 @@ class Collect(models.Model):
 
 class Message(models.Model):
     id = models.AutoField(primary_key=True)  # 自增主键
-    from_id = models.IntegerField()  # 发送者 ID，非空
-    to_id = models.IntegerField()  # 接收者 ID，非空
+    from_user = models.CharField(max_length=255)  # 发送者，非空
+    to_user = models.CharField(max_length=255)  # 接收者，非空
     text = models.CharField(max_length=255)  # 消息内容，最大长度 255，非空
     read = models.IntegerField(default=0)  # 是否已读，默认为未读 (False)
+    reply = models.IntegerField(default=0)  # 是否已读，默认为未读 (False) 
     created_time = models.DateTimeField(auto_now_add=True)  # 创建时间，自动记录发送时间
 
     class Meta:
@@ -125,7 +126,7 @@ class Message(models.Model):
         ordering = ['-created_time']  # 默认按消息创建时间倒序排列
 
     def __str__(self):
-        return f'Message from User {self.from_id} to User {self.to_id}'
+        return f'Message from User {self.from_user} to User {self.to_user}'
 
 
 

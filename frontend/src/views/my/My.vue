@@ -16,7 +16,11 @@
     <el-divider></el-divider>
     <!-- <el-divider></el-divider> -->
     
+    <el-divider></el-divider> 
     <div class="buttons"> 
+        <button @click="router.push('/my/msg')">Message Box
+          <span v-if="unread_amount > 0" class="badge">{{ unread_amount }}</span>
+        </button>
         <button @click="router.push('/my/post')">My Posts</button>
         <button @click="router.push('/my/like')">My Likes</button>
         <button @click="router.push('/my/star')">My Stars</button>
@@ -26,9 +30,20 @@
 </template>
 
 <script setup>
+import { post } from "@/net";
 import router from "@/routers/route"
+import { onMounted } from "vue";
+import { ref } from "vue";
 const username=localStorage.getItem('loginedUser')
+const unread_amount=ref(0)
 
+onMounted(()=>{
+  post('api/post/unread-num/',{
+    "username":username
+  },(res)=>{
+      unread_amount.value=res
+  })
+})
 </script>
 
 <style scoped>
@@ -65,30 +80,35 @@ const username=localStorage.getItem('loginedUser')
   padding: 0px 200px;
 }
 .buttons{
-    margin-top: 180px;
+    margin-top: 20px;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
 
-    justify-content: center;
-    gap:150px
+    align-items: center;
+    gap:90px
     
 
 }
 button{
-        text-align: center;
+    position: relative;
+    text-align: center;
     background-color:white;
-    margin-left: 20px;
-    width: 100%; /* ✅ 统一按钮宽度 */
-    max-width: 100px; /* ✅ 确保不会太宽 */
-    font-size: 30px;
+    
+    width: 90%; 
+    max-width: 300px; 
+    font-size: 36px;
     font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    font-weight: 500;
+    font-weight: 400;
     border:1px solid darkgray;
-    border-radius: 5px;
+    border-radius: 12px;
 
 }
+
+
 button:hover{
-    cursor: pointer; 
+    cursor: pointer;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* 添加阴影 */
+    transform: translateY(-1px); /* 悬停时略微上移 */ 
 }
 
 label {
@@ -101,5 +121,16 @@ label {
 label:hover {
     font-weight: bold; /* 鼠标悬停时加粗 */
 }
-
+.badge {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  background: red;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 3px 7px;
+  border-radius: 50%;
+  transform: translate(50%, -50%);
+}
 </style>

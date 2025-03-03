@@ -11,7 +11,7 @@
           </div>
           
           
-          <el-button type="info"  @click="openInputBox">Message</el-button>
+          <el-button type="info"  @click="openMsgBox">Message</el-button>
         </div>
         
         <el-divider></el-divider>
@@ -80,7 +80,7 @@
               <template #footer>
                 <span>
 
-                  <el-button @click="inputBoxYes" style="width: 100px;border-radius: 10px;">send</el-button>
+                  <el-button @click="sendMessage" style="width: 100px;border-radius: 10px;">send</el-button>
                 </span>
               </template>
             </el-dialog>
@@ -165,18 +165,18 @@
      
     })
 
-    const openInputBox=()=>{
+    const openMsgBox=()=>{
 
       showInput.value=true
 
     }
 
     //confirm to send messgae
-    const inputBoxYes=()=>{
+    const sendMessage=()=>{
       if(localStorage.getItem("accessToken")!=null)
         post('api/post/send-msg/',{
-          "from-id":1, //之后这里要动态的获取当前登录用户的id
-          "to-id":postData.value.publisher_id,
+          "from-user":loginedUser.value, //之后这里要动态的获取当前登录用户的id
+          "to-user":postData.value.publisher,
           "msg":inputValue.value
         },()=>{
           showInput.value=false 

@@ -41,6 +41,10 @@ const router =createRouter({
                     path:'/my/post',
                     name:'my-own-post',
                     component:()=>import('@/views/my/MyPost.vue')
+                },{
+                    path:'/my/msg',
+                    name:'my-msg-box',
+                    component:()=>import('@/views/my/MyMsg.vue')
                 }
 
             ]
