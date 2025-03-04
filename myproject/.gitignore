@@ -10,4 +10,4 @@ venv/
 # Ignore SQLite database files
 *.sqlite3
 # Ignore uploaded pictures
-
+media/

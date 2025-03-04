@@ -77,8 +77,8 @@ const changeCategory=(category)=>{
   
 
   .sidebar {
-    padding: 10px;
-    margin:100px 10px 0px 10px;
+    padding: 0 10px;
+    margin:80px 10px 0px 10px;
     /* left: 0px; */
     height: 200px;
     width:100%;

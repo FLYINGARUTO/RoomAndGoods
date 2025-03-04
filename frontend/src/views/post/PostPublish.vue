@@ -123,7 +123,7 @@ import router from "@/routers/route";
     width: 1200px;
     height:100vh;
     max-width: 100%;
-
+    margin-top: 20px;
     gap: 10px;
     background: white;
     padding: 60px 100px;

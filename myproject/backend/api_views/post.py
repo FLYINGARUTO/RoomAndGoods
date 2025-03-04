@@ -123,7 +123,7 @@ def publish(request):
     # return Response({'code':200,'urls':saved_files})
     for file in files:
         #生成独一无二的文件名 防止同名文件覆盖
-        pre,suf=file.name.split(".")
+        pre,suf=os.path.splitext(file.name)
         pre=pre+str(random.randint(1,100000))
         file.name=pre+"."+suf
         # 定义本地存储路径

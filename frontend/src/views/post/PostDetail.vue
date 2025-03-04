@@ -24,7 +24,7 @@
           <p class="post-details">{{postData.details }}</p>
 
           <!-- Photo Box -->
-          <div class="photo-box">
+          <div class="photo-box" v-if="photoUrls && photoUrls.length > 0">
             <div v-for="(photo,index) in photoUrls" :key="index" class="image-wrapper">
               <img :src="'http://10.223.74.229:8000' +photo.photo_url" alt="post image"/> 
             </div>
@@ -379,8 +379,8 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    margin:10px;
-    padding: 0 5px;
+    margin:10px 0px;
+    
   }
   </style>
   

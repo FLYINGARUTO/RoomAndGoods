@@ -77,7 +77,17 @@ CORS_ALLOW_HEADERS = [
     "x-requested-with",
     "headers",  # Allow the 'headers' field
 ]
+from datetime import timedelta
 
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),  # 设置 accessToken 有效期为 1 天
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),  # 设置 refreshToken 有效期为 7 天
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
+    "ALGORITHM": "HS256",
+    "SIGNING_KEY": SECRET_KEY,  # 这里使用你的 Django SECRET_KEY
+    "AUTH_HEADER_TYPES": ("Bearer",),
+}
 ROOT_URLCONF = 'myproject.urls'
 
 TEMPLATES = [

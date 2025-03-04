@@ -20,11 +20,13 @@
             posts.value=res.map(item=>({
               id: item.id,
               title: item.title,
-              user: item.publisher_id,
+              user: item.publisher,
               details: item.details,
               views: item.views,
               date: item.create_time,
-              category: item.category
+              category: item.category,
+              image: item.image
+
             }))
           })
 
@@ -56,17 +58,22 @@
         router.push('/post/new')
       }
     }
+    const BASE_URL = 'http://10.223.74.229:8000';
+
+    const getImageUrl = (imagePath) => {
+      return imagePath ? `${BASE_URL}${imagePath}` : "http://10.223.74.229:8000/media/uploads/white.png"; // 处理 null 或 undefined
+    };
 
 </script>
 <template>
       
     <div class="main-content">
-      <el-divider v-if="username!=null">{{ "Welcome,"+ username}}</el-divider>
-      <div class="banner">
-        <text style="font-weight: bold;">投放广告联系abc@abc.com</text>
-      </div>
+      <el-divider v-if="username!=null">{{ "Welcome, "+ username}}</el-divider>
 
-       
+      <!-- <div class="banner">
+        <text style="font-weight: bold;">投放广告联系abc@abc.com</text>
+      </div> -->
+
       <div class="sort-bar">
         <div style="width: 30%;">
           <el-button @click="selectedCategory='all'" class="sidebar-btn" :class="{active: selectedCategory=='all'}">All</el-button>
@@ -95,14 +102,20 @@
       <div class="post-list">
         <el-card v-for="post in sortedPosts" :key="post.title" shadow="hover" class="post-card"
               @click="goToDetail(post.id)">
-
+          <img :src="getImageUrl(post.image)">
+    
           <h3 style="font-weight: bold;">{{ post.title }}</h3>
-          <p style="margin-top: 5px;">{{ post.details }}</p>
-          <div style="margin-top: 5px;justify-content: space-between; display: flex; color: darkgray;">
-            <p>{{ post.views }} views</p> 
+            
+   
+          
+          <div style="justify-content: space-between; display: flex; color: darkgray;">
+            <p>{{ post.user }}</p><p>{{ post.views }} views</p>
             <p>{{ post.date }}</p>
+             
+            
           </div>
         </el-card>
+        
       </div>
     </div>
   </template>
@@ -121,14 +134,15 @@
     height: 100vh;
     width: 100%;
     display: flex;
-    justify-content: center;
-    overflow: auto;
+
+  
   }
   
   /* Banner */
   .banner {
     width: 100%;
-    height: 100px;
+    height: 100%;
+    max-height: 100px;
     background: white;
     border-radius: 15px;
     border:1px solid #eeeeee;
@@ -136,7 +150,7 @@
     justify-content: center;
     align-items: center;
     font-size: 20px;
-    overflow: hidden;
+    
   }
   
   /* Sorting Bar */
@@ -173,7 +187,7 @@
     color: white;
 }
   /* Post List */
-  .post-list {
+  .post-list1 {
     overflow:auto;
     margin-top: 10px;
     flex: 1;
@@ -182,7 +196,7 @@
     margin-left: 30px;
     font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   }
-  .post-card {
+  .post-card1 {
     margin-bottom: 10px;
   }
   .el-dropdown-link {
@@ -193,6 +207,50 @@
   color:#007bff;
   font-weight: bold;
 
+}
+
+.post-list2 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 20px; /* 控制卡片间距 */
+    margin-top: 10px;
+    overflow-y: auto;
+}
+.post-list {
+    column-count: 3;  /* ✅ 让它变成 3 列 */
+    column-gap: 20px; /* ✅ 控制列间距 */
+    margin-top: 10px;
+}
+
+
+.post-card {
+  
+    width: 100%; /* 让卡片充满父容器 */
+    max-width: 400px; /* 设置最大宽度，防止太大 */
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    justify-content: flex-start; /* 让内容均匀分布 */
+
+    border-radius: 10px;
+    margin-bottom: 10px;
+    display: inline-block;
+    position: relative; /* ✅ 让 `hover` 效果只影响自己 */
+
+}
+
+.post-card:hover {
+    border: 1px solid rgba(0, 0, 0, 0.5); /* ✅ 确保 border 不会让高度变化 */
+}
+
+img{
+  width: 100%;
+  height: auto;
+  
+  object-fit: contain;
+  border-radius: 15px;
+  border: 1px solid #eeeeee;
 }
   </style>
   
