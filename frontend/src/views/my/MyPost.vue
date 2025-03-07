@@ -4,18 +4,22 @@
     import {get,post} from '@/net/index'
     import router from "@/routers/route"
     import { usePostStore } from '@/store/postStore';
+    import { ElMessageBox, ElMessage } from 'element-plus';
     const postStore =usePostStore()
+    import { useUrlStore } from '@/store/urlStore';
+    const urlStore =useUrlStore()
     onMounted(() => {
         post("/api/post/get-my-posts/",{"username":localStorage.getItem('loginedUser')},(res)=>{
             console.log(res)
             posts.value=res.map(item=>({
               id: item.id,
               title: item.title,
-              user: item.publisher_id,
+              user: item.publisher,
               details: item.details,
               views: item.views,
               date: item.create_time,
-              category: item.category
+              category: item.category,
+              image: item.image
             }))
           })
 
@@ -39,16 +43,46 @@
     const goToDetail=(postId)=>{
         router.push(`/post/${postId}`)
     }
-    const delete_post=(id)=>{
-        post('api/post/delete-post/',{
-          'post-id':id
-        },(res)=>{
-            console.log(res.message)
-            router.go(0) 
-        })
-    }
 
 
+    const delete_post = (id) => {
+    // 弹出确认框
+    ElMessageBox.confirm(
+      'Are you sure you want to delete this post?',
+      'Warning',
+      {
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'Cancel',
+        type: 'warning',
+        appendTo: 'body'
+      }
+    )
+      .then(() => {
+        // 用户点击 Yes，执行删除
+        post('api/post/delete-post/', { 'post-id': id }, (res) => {
+          console.log(res.message);
+          ElMessage({
+            type: 'success',
+            message: 'Post deleted successfully',
+          });
+          router.go(0); // 刷新页面
+        });
+      })
+      .catch(() => {
+        // 用户点击 Cancel
+        ElMessage({
+          type: 'info',
+          message: 'Deletion canceled',
+        });
+      });
+};
+
+
+    const BASE_URL = urlStore.baseUrl
+
+    const getImageUrl = (imagePath) => {
+      return imagePath ? `${BASE_URL}${imagePath}` : `${BASE_URL}/media/uploads/white.png`; // 处理 null 或 undefined
+    };
 </script>
 <template>
       
@@ -72,7 +106,7 @@
 
       
       <div class="post-list">
-        <el-card v-for="post in sortedPosts" :key="post.title" shadow="hover" class="post-card"
+        <!-- <el-card v-for="post in sortedPosts" :key="post.title" shadow="hover" class="post-card"
               @click="goToDetail(post.id)">
 
           <h3 style="font-weight: bold;">{{ post.title }}</h3>
@@ -84,6 +118,21 @@
           <div style="margin-top: 5px;justify-content: space-between; display: flex; color: darkgray;">
             <p>{{ post.views }} views</p> 
             <p>{{ post.date }}</p>
+          </div>
+        </el-card> -->
+        <el-card v-for="post in sortedPosts" :key="post.title" shadow="hover" class="post-card"
+              @click="goToDetail(post.id)">
+          <img :src="getImageUrl(post.image)">
+    
+          <h3 style="font-weight: bold;">{{ post.title }}</h3>
+            
+   
+          
+          <div style="justify-content: space-between; display: flex; color: darkgray;">
+            <p>{{ post.user }}</p>
+            <p>{{ post.date }}</p>
+            <button class="delete-btn" @click.stop="delete_post(post.id)">delete</button>
+            
           </div>
         </el-card>
       </div>
@@ -104,7 +153,7 @@
     height: 100vh;
     width: 100%;
     display: flex;
-    justify-content: center;
+
     overflow-y: auto;
   }
   
@@ -139,17 +188,42 @@
   
   /* Post List */
   .post-list {
-    overflow:auto;
+    /* overflow:auto;
     margin-top: 10px;
-    flex: 1;
+    flex: 1; */
+    column-count: 3;  /* ✅ 让它变成 3 列 */
+    column-gap: 20px; /* ✅ 控制列间距 */
+    margin-top: 10px;
   }
   .btn{
     font-family: Verdana, Geneva, Tahoma, sans-serif;
   }
   .post-card {
-    margin-bottom: 10px;
-  }
+    width: 100%; /* 让卡片充满父容器 */
+    max-width: 400px; /* 设置最大宽度，防止太大 */
+    height:max-content;
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    justify-content: flex-start; /* 让内容均匀分布 */
 
+    border-radius: 10px;
+    margin-bottom: 10px;
+    display: inline-block;
+    position: relative; /* ✅ 让 `hover` 效果只影响自己 */
+  }
+  .post-card:hover {
+    border: 1px solid rgba(0, 0, 0, 0.5); /* ✅ 确保 border 不会让高度变化 */
+}
+
+img{
+  width: 100%;
+  height: auto;
+  
+  object-fit: contain;
+  border-radius: 15px;
+  border: 1px solid #eeeeee;
+}
   .post-manage{
     display: flex;
     justify-content: space-between;
@@ -158,5 +232,10 @@
     font-size: 16px;
     border-radius: 3px;
   } 
+  .delete-btn{
+    color: black;
+    background-color: lightgrey;
+    border-radius: 4px;
+  }
   </style>
   

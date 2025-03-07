@@ -35,7 +35,7 @@ def post_test(request):
 def get_post_list(request):
     posts = Post.objects.all()  # Get a single post
     for post in posts:
-       post.create_time=post.create_time.strftime("%Y-%m-%d %H:%M:%S")
+       post.create_time=post.create_time.strftime("%Y/%m/%d %H:%M")
        
     serialized_post = PostSerializer(posts,many=True)  # Convert to JSON format
     return Response({'code': 200, 'data': serialized_post.data})

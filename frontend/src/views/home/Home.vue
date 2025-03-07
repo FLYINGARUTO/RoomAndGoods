@@ -13,6 +13,8 @@
       Plus,
     } from '@element-plus/icons-vue'
     // const postStore =usePostStore()
+    import { useUrlStore } from '@/store/urlStore';
+    const urlStore =useUrlStore()
     const username=localStorage.getItem('loginedUser')
     onMounted(() => {
         get("/api/get/post-list",(res)=>{
@@ -25,7 +27,8 @@
               views: item.views,
               date: item.create_time,
               category: item.category,
-              image: item.image
+              image: item.image,
+              likes: item.likes
 
             }))
           })
@@ -58,10 +61,10 @@
         router.push('/post/new')
       }
     }
-    const BASE_URL = 'http://10.223.74.229:8000';
+    const BASE_URL = urlStore.baseUrl
 
     const getImageUrl = (imagePath) => {
-      return imagePath ? `${BASE_URL}${imagePath}` : "http://10.223.74.229:8000/media/uploads/white.png"; // 处理 null 或 undefined
+      return imagePath ? `${BASE_URL}${imagePath}` : `${BASE_URL}/media/uploads/white.png`; // 处理 null 或 undefined
     };
 
 </script>
@@ -109,8 +112,9 @@
    
           
           <div style="justify-content: space-between; display: flex; color: darkgray;">
-            <p>{{ post.user }}</p><p>{{ post.views }} views</p>
-            <p>{{ post.date }}</p>
+            <p>{{ post.user }}</p>
+            <p>{{ post.likes }} 🩶</p>
+            
              
             
           </div>

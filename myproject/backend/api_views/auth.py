@@ -3,8 +3,11 @@ from rest_framework.response import Response
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login ,logout
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework.permissions import IsAuthenticated
+
 from rest_framework_simplejwt.tokens import RefreshToken
+from ..serializer import *
+
+
 
 def get_token_for_user(user):
     refresh = RefreshToken.for_user(user)

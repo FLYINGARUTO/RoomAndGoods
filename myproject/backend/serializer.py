@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import *
+from django.contrib.auth.models import User
 class PostSerializer(serializers.ModelSerializer):
     image=serializers.SerializerMethodField() #添加自定义字段
     class Meta:
@@ -24,4 +25,8 @@ class MessageSerializer(serializers.ModelSerializer):
 class LikeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Like
-        fields = '__all__'  
+        fields = '__all__' 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id','username','is_staff','is_superuser']  
