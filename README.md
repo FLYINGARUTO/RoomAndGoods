@@ -2,8 +2,17 @@ backend implementation is in "**myproject**" folder<br />
 frontend implementation is in "**frontend**" folder
 
 
-prepare the packages needed before you run it:<br />
+prepare the environment needed before you run it:<br />
 
+python=3.10.9<br />
+npm=10.9.2<br />
+mysqlclient=2.0.3<br />
+django=5.1.1<br />
+django-cors-headers=4.7.0<br />
+djangorestframework=3.15.2<br />
+djangorestframework_simplejwt=5.4.0<br />
+daphne=4.1.2<br />
+channels=4.2.0<br />
 
 pip install django djangorestframework<br />
 pip install django-cors-headers<br />
@@ -33,9 +42,9 @@ run the **GoodsAndRooms.sql** within your local database to inject the prepared 
 <br />
 <br />
 
-how to run it:<br />
+how to start the application:<br />
 
 
-cd into myproject and run **python manage.py runserver** to start django <br />
-cd into myproject and run **npm run dev** to start vue<br />
-go to localhost:5173 (port of vue)
+cd into myproject and run **daphne -b 0.0.0.0 -p 8000 myproject.asgi:application** to start the backend service <br />
+cd into myproject and run **npm run dev -- --host 0.0.0.0** to start the frontend service<br /><br />
+go to localhost:5173 or your_host:5173
