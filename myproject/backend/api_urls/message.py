@@ -8,6 +8,8 @@ urlpatterns = [
     path('api/post/unread-num/',unread_amount),
     path('api/post/read/',read),
     path('api/post/read-all/',readAll),
-    path('api/post/reply/',reply)
+    path('api/post/reply/',reply),
+    path('api/post/load-chat/',get_chat_messages),
+    path('api/post/chat-list/',get_chat_list)
 
 ]

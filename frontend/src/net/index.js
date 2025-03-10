@@ -4,7 +4,7 @@ import router from "../routers/route.js";
 const refreshItemName="refreshToken"
 const authItemName="accessToken"
 // const API_BASE_URL="http://127.0.0.1:8000"
-const API_BASE_URL="http://10.223.74.229:8000"
+// const API_BASE_URL="http://10.223.74.229:8000"
 const defaultFailure=(message,code,url)=>{
     console.log(`请求地址：${url} ，状态码：${code} ，错误信息：${message}`)
     ElMessage.warning(message)

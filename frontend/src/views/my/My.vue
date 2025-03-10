@@ -16,11 +16,10 @@
     <el-divider></el-divider>
     <!-- <el-divider></el-divider> -->
     
-    <el-divider></el-divider> 
     <div class="buttons"> 
-        <button @click="router.push('/my/msg')">Message Box
+        <!-- <button @click="router.push('/my/msg')">Message Box(已弃用)
           <span v-if="unread_amount > 0" class="badge">{{ unread_amount }}</span>
-        </button>
+        </button> -->
         <button @click="router.push('/my/post')">My Posts</button>
         <button @click="router.push('/my/like')">My Likes</button>
         <button @click="router.push('/my/star')">My Stars</button>

@@ -32,7 +32,7 @@ def user_login(request):
     user=authenticate(request,username=username,password=password)
     if user is not None:
         tokens = get_token_for_user(user)
-        return Response({'code':200,'message':"Successfully Logged in",'data':{'token':tokens,'loginedUser':username}})
+        return Response({'code':200,'message':"Successfully Logged in",'data':{'token':tokens,'loginedUser':username,'userId':user.id}})
     else:
         return Response({'code':302,'message':"Failed to Log in"}) 
     

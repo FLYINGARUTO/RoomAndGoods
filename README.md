@@ -8,6 +8,8 @@ prepare the packages needed before you run it:<br />
 pip install django djangorestframework<br />
 pip install django-cors-headers<br />
 pip install mysqlclient<br />
+pip install channels<br />
+pip install daphne<br />
 pip install mysql-connector-python<br />
 pip install djangorestframework-simplejwt<br />
 <br />

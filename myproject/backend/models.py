@@ -146,7 +146,23 @@ class PostPic(models.Model):
     # how to make use of the 'related_name'    
     # post = Post.objects.get(id=1)
     # pictures = post.pictures.all()  # 直接用 related_name 反向查询所有关联的图片
+from django.contrib.auth.models import User
+class ChatMessage(models.Model):
 
+    chat_id = models.CharField(max_length=255)
+    sender = models.ForeignKey(User,related_name='sent_messages',on_delete=models.CASCADE)
+    receiver = models.ForeignKey(User,related_name='received_messages',on_delete=models.CASCADE)
+    content = models.CharField(max_length=255)
+    create_at = models.DateTimeField(auto_now_add=True)  # 点赞时间，自动记录
+    is_read = models.IntegerField(default=0)
+    
+    def __str__(self):
+        return f"Message from {self.sender} to {self.receiver} - {self.content[:20]}..."
+    class Meta:
+        db_table = 'chat_message'  # 指定数据库表名
+        ordering = ['create_at']  # 默认按 `order` 排序，如果为空则按 `id`
+        verbose_name = 'Chat Message'
+        verbose_name_plural = 'Chat Messages' 
 class UploadedFile(models.Model):
     file = models.FileField(upload_to="uploads/")
     uploaded_at = models.DateTimeField(auto_now_add=True)

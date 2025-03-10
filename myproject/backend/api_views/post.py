@@ -103,7 +103,8 @@ def publish(request):
     details=request.data.get('details')
     type=request.data.get('type')
     username=request.data.get('username')
-    post=Post(publisher=username,title=title,details=details,category=type)
+    user_id=request.data.get('user-id')
+    post=Post(publisher_id=user_id,publisher=username,title=title,details=details,category=type)
     post.save()
     #上传文件
     files=request.FILES.getlist('photos')

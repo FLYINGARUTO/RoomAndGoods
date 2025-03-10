@@ -29,7 +29,8 @@ function loginForm(){
     if(valid){
       post('api/post/login/',{username:form.username,password:form.password},(res)=>{
         console.log("?",res)
-        localStorage.setItem('loginedUser',res.loginedUser) 
+        localStorage.setItem('loginedUser',res.loginedUser)
+        localStorage.setItem('loginedUserId',res.userId) 
         if(res.token){
           localStorage.setItem('accessToken',res.token.access)
           localStorage.setItem('refreshToken',res.token.refresh)
@@ -76,7 +77,7 @@ function loginForm(){
             </el-col>
           </el-row>
           <div style="margin-top: 40px">
-              <el-button @click="loginForm" style="width: 200px" type="success" plain>login</el-button>
+              <el-button @keydown.enter="loginForm" @click="loginForm" style="width: 200px" type="success" plain>login</el-button>
           </div>
           <el-divider style="font-size: 13px;color: grey">no account?</el-divider>
           <div>

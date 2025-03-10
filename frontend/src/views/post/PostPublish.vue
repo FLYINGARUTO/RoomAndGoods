@@ -38,7 +38,11 @@
   <script setup>
   import { ref } from "vue";
   import {post,get,internalPost} from "@/net/index"
-import router from "@/routers/route";
+  import router from "@/routers/route";
+  import { useUrlStore } from "@/store/urlStore";
+  const urlStore = useUrlStore()
+  const BASE_URL=urlStore.baseUrl
+
   const processing=ref(false)
   // 🔹 Define reactive form data
   const form = ref({
@@ -73,6 +77,7 @@ import router from "@/routers/route";
       formData.append("type", form.value.type);
       formData.append("details", form.value.details);
       formData.append("username",localStorage.getItem('loginedUser'))
+      formData.append("user-id",localStorage.getItem('loginedUserId'))
     
       // Append each file to FormData
       photoFiles.value.forEach((file, index) => {
@@ -87,7 +92,7 @@ import router from "@/routers/route";
           } 
       console.log("🚀 Final Request Headers:", JSON.stringify(headers, null, 2)); // ✅ 确保 headers 正确
 
-      internalPost("http://10.223.74.229:8000/api/post/publish/", formData,
+      internalPost(`${BASE_URL}/api/post/publish/`, formData,
           headers
         ,(response)=>{
           console.log("Upload Successful:", response);

@@ -45,6 +45,10 @@ const router =createRouter({
                     path:'/my/msg',
                     name:'my-msg-box',
                     component:()=>import('@/views/my/MyMsg.vue')
+                },{
+                    path:'/chat',
+                    name:'chat-list',
+                    component:()=>import('@/views/chat/ChatList.vue')
                 }
 
             ]
@@ -56,7 +60,11 @@ const router =createRouter({
             path:'/register',
             name:'register-page',
             component:()=>import('@/views/identity/RegisterPage.vue')
-        }
+        },{
+                    path:'/chat/:chatWith/:chatTarget',//chatwith id; chatTagert name
+                    name:'chatbox',
+                    component:()=>import('@/views/chat/chat.vue')
+            }
         
     ]
 }

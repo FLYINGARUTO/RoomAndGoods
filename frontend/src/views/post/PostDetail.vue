@@ -3,6 +3,7 @@ import { reactive, ref } from 'vue';
 import { ElAlert, ElAvatar, ElButton, ElDivider, ElIcon } from 'element-plus';
 import { onMounted } from 'vue';
 import {get,post,internalPost} from '@/net/index'
+
 import router from '@/routers/route'
 import { useRoute } from 'vue-router';
 import likeImg from '@/assets/like.png'
@@ -88,6 +89,10 @@ const bigPicUrl=ref("")
 const openBigPicture=(url)=>{
   bigPicUrl.value=`${BASE_URL}${url}`
   showPicModal.value=true
+}
+
+const openChatBox=()=>{
+  router.push(`/chat/${postData.value.publisher_id}/${postData.value.publisher}`)
 }
 const openMsgBox=()=>{
 
@@ -201,7 +206,7 @@ const star=()=>{
           </div>
           
           
-          <el-button type="info"  @click="openMsgBox">Message</el-button>
+          <el-button type="info"  @click="openChatBox">Message</el-button>
         </div>
         
         <el-divider></el-divider>
