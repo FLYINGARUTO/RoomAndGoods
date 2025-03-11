@@ -72,11 +72,18 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # 允许 Vue 前端访问的地址
     "http://127.0.0.1:5173",
+    "http://172.30.131.225:5173"
 
 ]
+# CORS_ALLOWED_ORIGIN_REGEXES = [
+#     r"^http://10\.223\..*:5173$",  # 允许所有 10.223.x.x 设备
+#     r"^http://172\.30\..*:5173$" 
+# ]
 CORS_ALLOWED_ORIGIN_REGEXES = [
-    r"^http://10\.223\..*:5173$",  # 允许所有 10.223.x.x 设备
+    r"^http://10\.223\.\d+\.\d+:5173$",  # ✅ 允许所有 10.223.x.x 设备
+    r"^http://172\.30\.\d+\.\d+:5173$",  # ✅ 允许所有 172.30.x.x 设备
 ]
+
 CORS_ALLOW_HEADERS = [
     "accept",
     "authorization",

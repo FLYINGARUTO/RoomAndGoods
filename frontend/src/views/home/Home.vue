@@ -14,8 +14,11 @@
     } from '@element-plus/icons-vue'
     // const postStore =usePostStore()
     import { useUrlStore } from '@/store/urlStore';
+import { ElButton } from 'element-plus';
     const urlStore =useUrlStore()
     const username=localStorage.getItem('loginedUser')
+    const searchInput=ref("")
+    const searchKey=ref("")
     onMounted(() => {
         get("/api/get/post-list",(res)=>{
             console.log(res)
@@ -36,11 +39,20 @@
     })
     const selectedCategory= ref("all")
     //根据分类过滤
-    const filteredPosts = computed(() =>
-            selectedCategory.value === "all"
-                ? posts.value
-                : posts.value.filter(post => post.category === selectedCategory.value)
-        );
+    // const filteredPosts = computed(() =>
+    //         selectedCategory.value === "all"
+    //             ? posts.value
+    //             : posts.value.filter(post => post.category === selectedCategory.value)
+    //     );
+    const filteredPosts = computed(() => {
+      return posts.value.filter(post =>
+        (selectedCategory.value === "all" || post.category === selectedCategory.value) &&
+        (!searchKey.value.trim() || post.title.toLowerCase().includes(searchKey.value.toLowerCase()) ||
+        post.details.toLowerCase().includes(searchKey.value.toLowerCase()))
+      );
+    });
+
+      
     // Sample post data
     const posts = ref([]);
 
@@ -66,6 +78,10 @@
     const getImageUrl = (imagePath) => {
       return imagePath ? `${BASE_URL}${imagePath}` : `${BASE_URL}/media/uploads/white.png`; // 处理 null 或 undefined
     };
+    const search = () => {
+      searchKey.value=searchInput.value
+    };
+
 
 </script>
 <template>
@@ -84,6 +100,7 @@
           <el-button @click="selectedCategory='Sublet'" class="sidebar-btn" :class="{active: selectedCategory=='Sublet'}">Sublet</el-button>
           
         </div>
+
         <div> 
           <el-dropdown trigger="click">
             <span class="el-dropdown-link" >
@@ -121,7 +138,12 @@
         </el-card>
         
       </div>
+      <div class="search-bar">
+        <el-input v-model="searchInput" placeholder="🔍 Search Here" @keyup.enter="search"></el-input>
+        <ElButton class="sidebar-btn" @click="search">Search</ElButton>
+      </div>
     </div>
+    
   </template>
   
 
@@ -160,7 +182,7 @@
   /* Sorting Bar */
 .sort-bar {
   display: flex;
-  justify-content:space-between; /* ✅ 让第一个和最后一个元素分开 */
+  justify-content:space-between; 
   align-items: center;
   width: 100%;
   margin-top: 10px;
@@ -255,6 +277,22 @@ img{
   object-fit: contain;
   border-radius: 15px;
   border: 1px solid #eeeeee;
+}
+.search-bar {
+  position: fixed;  /* 🔥 让它悬浮 */
+  top: 10px;        /* 🔥 距离顶部 10px */
+  left: 50%;        /* 🔥 水平居中 */
+  transform: translateX(-50%);  /* 🔥 让它真正水平居中 */
+  background: white;  /* 🔥 背景色 */
+  z-index: 1000;     /* 🔥 保证它在最上层 */
+  width: 20%;        /* 🔥 控制宽度 */
+  padding: 10px;     /* 🔥 让内容有间距 */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* 🔥 添加阴影 */
+  border-radius: 8px; /* 🔥 圆角边框 */
+  display: flex;      /* 🔥 让输入框 & 按钮水平排列 */
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
 }
   </style>
   
