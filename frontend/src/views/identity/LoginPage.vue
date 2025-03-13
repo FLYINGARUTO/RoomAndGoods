@@ -77,7 +77,7 @@ function loginForm(){
             </el-col>
           </el-row>
           <div style="margin-top: 40px">
-              <el-button @keydown.enter="loginForm" @click="loginForm" style="width: 200px" type="success" plain>login</el-button>
+              <el-button @click="loginForm" style="width: 200px" type="success" plain>login</el-button>
           </div>
           <el-divider style="font-size: 13px;color: grey">no account?</el-divider>
           <div>

@@ -139,7 +139,7 @@ import { ElButton } from 'element-plus';
         
       </div>
       <div class="search-bar">
-        <el-input v-model="searchInput" placeholder="🔍 Search Here" @keyup.enter="search"></el-input>
+        <el-input v-model="searchInput" placeholder="🔍" @keyup.enter="search"></el-input>
         <ElButton class="sidebar-btn" @click="search">Search</ElButton>
       </div>
     </div>

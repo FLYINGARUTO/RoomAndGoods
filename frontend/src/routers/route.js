@@ -42,15 +42,15 @@ const router =createRouter({
                     name:'my-own-post',
                     component:()=>import('@/views/my/MyPost.vue')
                 },{
-                    path:'/my/msg',
-                    name:'my-msg-box',
-                    component:()=>import('@/views/my/MyMsg.vue')
-                },{
                     path:'/chat',
                     name:'chat-list',
                     component:()=>import('@/views/chat/ChatList.vue')
+                },{
+                    path:'/user/:username',
+                    name:"other-user-page",
+                    component:()=>import('@/views/otherUser/OtherUserPage.vue')
                 }
-
+                
             ]
         },{
             path:'/login',
@@ -61,10 +61,10 @@ const router =createRouter({
             name:'register-page',
             component:()=>import('@/views/identity/RegisterPage.vue')
         },{
-                    path:'/chat/:chatWith/:chatTarget',//chatwith id; chatTagert name
-                    name:'chatbox',
-                    component:()=>import('@/views/chat/chat.vue')
-            }
+            path:'/chat/:chatWith/:chatTarget',//chatwith id; chatTagert name
+            name:'chatbox',
+            component:()=>import('@/views/chat/chat.vue')
+        }
         
     ]
 }

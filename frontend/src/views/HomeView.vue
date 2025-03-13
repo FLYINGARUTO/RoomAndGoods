@@ -37,10 +37,14 @@ const changeCategory=(category)=>{
         <label class="sidebar-btn" :class="{ active: selectedCategory === 'Used'}" @click="changeCategory('Used')">Used</label>
         <label class="sidebar-btn" :class="{ active: selectedCategory === 'Sublet'}" @click="changeCategory('Sublet')">Sublet</label> -->
         
-        <div class="side-bottom"> 
-          <label v-if="username!=null" class="sidebar-btn" @click="router.push('/chat')">Chat</label> 
-          <label v-if="username!=null" class="sidebar-btn" @click="router.push('/my')">My</label>
+        <div class="side-rightend"  v-if="username!=null" > 
+          <label class="sidebar-btn" @click="router.push('/chat')">Chat</label> 
+          <label  class="sidebar-btn" @click="router.push('/my')">My</label>
           <label class="sidebar-btn logout" @click="logout">Logout</label>
+        </div>
+        <div class="side-rightend"  v-if="username==null" > 
+
+          <label class="sidebar-btn" @click="router.push('/login')">Login</label>
         </div>
       </div>
       
@@ -120,7 +124,7 @@ const changeCategory=(category)=>{
 
    
 }
-.side-bottom{
+.side-rightend{
   margin-left: auto;
   display: flex;
   flex-direction: row;

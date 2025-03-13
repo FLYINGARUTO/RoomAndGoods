@@ -3,7 +3,7 @@
       <!-- 顶部显示对话信息 -->
       <div class="chat-header">
         <button class="back-button" @click="goBack">⬅ Back</button>
-        <h3 style="font-weight: bold;">{{chat_with_name}}</h3>
+        <h3 style="font-weight: bold;cursor: pointer" @click="router.push(`/user/${chat_with_name}`)" >{{chat_with_name}}</h3>
       </div>
 
   

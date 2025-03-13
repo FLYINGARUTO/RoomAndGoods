@@ -10,16 +10,18 @@
             chat_targets.value=res.map(item=>({
               id: item.id,
               username: item.username,
-
+              unread_count: item.unread_count,
+              last_message: item.last_message,
+              friendly_time: item.friendly_time
             }))
           })
 
     })
-  
+    const ordered_chats=computed(()=>{
+      return [...chat_targets.value].sort((a, b) => (new Date(b.last_message) - new Date(a.last_message)));
+    })
     // Sample post data
     const chat_targets = ref([]);
-
-    const sortBy = ref('desc');
 
     const openChatBox=(id,name)=>{
         router.push(`chat/${id}/${name}`)
@@ -49,9 +51,12 @@
 
       
       <div class="msg-list">
-        <el-card v-for="user in chat_targets" :key="user.id" shadow="hover" class="msg-card" @click="openChatBox(user.id,user.username)" >
+        <el-card v-for="user in ordered_chats" :key="user.id" shadow="hover" class="msg-card" :class="{'unread' : user.unread_count>0}" @click="openChatBox(user.id,user.username)" >
 
-          <h3 style="font-weight: bold;">{{ user.username }}</h3>
+          <span style="font-weight: bold;text-align: center;">{{ user.username }}</span>
+          <span style="margin-left: 15px;color= #eeeeee;font-size: 10px;">{{ user.friendly_time }}</span>
+          <span class="unread-badge" v-if="user.unread_count>0">{{ user.unread_count }}</span>
+          
           <!-- <p style="margin-top: 5px;">{{ msg.details }}</p> -->
           <!-- <div style="margin-top: 5px;justify-content: space-between; display: flex; color: darkgray;">
 
@@ -121,7 +126,7 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
   /* Post List */
   .msg-list {
     margin: 0 auto;
-    width: 40vw;
+    width: 30vw;
     overflow:auto;
     margin-top: 10px;
     flex: 1;
@@ -130,15 +135,34 @@ font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
   }
   .msg-card {
+    
+    display: flex;
+    justify-content: space-between ;
+    position: relative;
     margin-bottom: 10px;
     border-radius: 15px;
-    text-align: center;
-    
+
   }
   .msg-card:hover {
     cursor: pointer;
     
   }
+
+  .unread-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;  /* 设定固定宽高，形成正圆 */
+    height:20px;
+    background-color: red;  /* 红色背景 */
+    color: white;  /* 文字颜色 */
+    font-size: 10px;
+    font-weight: bold;
+    border-radius: 50%;  /* 让它变成圆形 */
+    position: absolute; 
+    right: 15px;  
+    top: 22px;
+}
 
   </style>
   
