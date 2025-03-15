@@ -1,0 +1,10 @@
+how to start backend service:
+
+RoomAndGoods % cd myproject/
+myproject % export DJANGO_SETTINGS_MODULE=myproject.settings
+myproject % daphne -b 0.0.0.0 -p 8000 myproject.asgi:application
+
+how to start frontend service:
+
+RoomAndGoods % cd frontend/
+frontend % npm run dev -- --host 0.0.0.0

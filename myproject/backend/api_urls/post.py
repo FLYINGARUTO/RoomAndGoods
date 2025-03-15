@@ -16,6 +16,7 @@ urlpatterns = [
     path('api/post/star/',star),
     path('api/post/cancel-star/',cancel_star),
     path('api/post/star-or-not/',hasStarred),
+    path('api/post/notify-test/',notify_test)
      
     
 ]

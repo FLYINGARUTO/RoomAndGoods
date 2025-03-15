@@ -71,10 +71,9 @@ def get_comments(request,id):
 @permission_classes([IsAuthenticated])
 @api_view(['POST'])
 def comment(request):
-    print("request headers:",request.headers)
     comment = request.data.get('comment')
-    from_user = request.data.get('from-user')
-    to_user = request.data.get('to-user')
+    from_user = request.data.get('from-user') #评论的人 username string
+    to_user = request.data.get('to-user') #被评论的人 
     post_id = request.data.get('post-id')
     #创建Comment记录
     commentObj=Comment.objects.create(from_user=from_user,to_user=to_user,post_id=post_id,comment=comment)
@@ -83,6 +82,11 @@ def comment(request):
     post.comments+=1
     post.save()
     commentObj.save()
+    Notification.objects.create(user=User.objects.get(username=to_user),
+                                from_user=User.objects.get(username=from_user),
+                                title=f"{from_user} commented on your post <{post.title}>",
+                                message=comment,category="comment",
+                                post=post)
     return Response({'code':200,'message':"Comment sent"})
 
 
@@ -153,18 +157,27 @@ def publish(request):
 @api_view(['post'])
 @permission_classes([IsAuthenticated])
 def like(request):
-    userId=request.data.get('from-user')
-    postOwner=request.data.get('to-user')
+    likerId=request.user.id
+    liker=request.data.get('from-user') #点赞的人
+    postOwner=request.data.get('to-user') #被点赞的人 帖子的主人
     postId=request.data.get('post-id')
-    #创建Like记录
-    like=Like.objects.create(from_user=userId,to_user=postOwner,post_id=postId)
-    
+
     try:
-        #Post记录点赞加1
         post=Post.objects.get(id=postId)
+        #Post记录点赞加1
         post.likes+=1
+        #创建Like记录
+        Like.objects.create(from_user=liker,to_user=postOwner,post_id=postId)
+        #创建Notification记录
+        Notification.objects.create(user=User.objects.get(username=postOwner),
+                                    from_user=User.objects.get(id=likerId),
+                                    title=f"{liker} liked your post <{post.title}>.",
+                                    category="like",
+                                    post=post)
+
+        
         post.save()
-        like.save()
+
         return Response({'code':200,'message':"'like' request has been handled"})
     except:
         return Response({'code':300,'message':"'like' request has failed"}) 
@@ -215,17 +228,24 @@ def hasLiked(request):
 @api_view(['post'])
 @permission_classes([IsAuthenticated])
 def star(request):
-    userId=request.data.get('from-user')
-    postOwner=request.data.get('to-user')
+    user=request.data.get('from-user') #点赞的人 名字
+    postOwner=request.data.get('to-user') #被点赞的人 名字
     postId=request.data.get('post-id')
     #创建Collect记录
-    star=Collect.objects.create(from_user=userId,to_user=postOwner,post_id=postId)
-    
+    star=Collect.objects.create(from_user=user,to_user=postOwner,post_id=postId)
+    user_obj=User.objects.get(username=user) #点赞的人 User实例
+    toUser_obj=User.objects.get(username=postOwner) #被点赞的人 User实例
     try:
         #Post记录点赞加1
         post=Post.objects.get(id=postId)
         post.stars+=1
         post.save()
+        Notification.objects.create(
+                    user=toUser_obj,from_user=user_obj,
+                    category="star"
+                    ,title=f"{user_obj.username} starred your post <{post.title}>",
+                    post=post
+                    )
         star.save()
         return Response({'code':200,'message':"'star' request has been handled"})
     except:
@@ -272,3 +292,28 @@ def hasStarred(request):
             'message':"current user has not starred this post",
             "code":0
         }})
+       
+@api_view(['post'])
+@permission_classes([IsAuthenticated])
+def notify_test(request):
+    user_id=request.data.get('to-user')
+    from_user_id=request.data.get('from-user')
+    title=request.data.get('title')
+    # category=request.data.get('category')
+    try:
+        user=User.objects.get(id=user_id)
+        from_user=User.objects.get(id=from_user_id)
+        #创建Notification记录
+        notify =  Notification.objects.create(user=user,from_user=from_user,title=title)
+        print(notify)
+        notify.save()
+
+
+        return Response({'code':200,'message':"'notify' request has been handled"})
+    except Exception as e:
+        import traceback
+        error_message = traceback.format_exc()  # 获取完整的错误堆栈信息
+        print(error_message)  # 直接在后端终端输出
+        return Response({'code': 500, 'message': 'Internal server error', 'error': str(e), 'traceback': error_message})
+    
+    

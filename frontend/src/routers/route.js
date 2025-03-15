@@ -49,8 +49,12 @@ const router =createRouter({
                     path:'/user/:username',
                     name:"other-user-page",
                     component:()=>import('@/views/otherUser/OtherUserPage.vue')
+                },{
+                    path:'/my/notification',
+                    name:"my-notification",
+                    component:()=>import('@/views/my/Notification.vue')
                 }
-                
+
             ]
         },{
             path:'/login',
@@ -64,7 +68,7 @@ const router =createRouter({
             path:'/chat/:chatWith/:chatTarget',//chatwith id; chatTagert name
             name:'chatbox',
             component:()=>import('@/views/chat/chat.vue')
-        }
+        },
         
     ]
 }

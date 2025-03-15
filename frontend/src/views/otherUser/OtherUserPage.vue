@@ -22,7 +22,8 @@
               views: item.views,
               date: item.create_time,
               category: item.category,
-              image: item.image
+              image: item.image,
+              likes: item.likes
             }))
           })
 
@@ -86,8 +87,9 @@
    
           
           <div style="justify-content: space-between; display: flex; color: darkgray;">
-            <p>{{ post.user }}</p><p>{{ post.views }} views</p>
+            
             <p>{{ post.date }}</p>
+            <p>{{ post.likes }}🩶</p>
              
             
           </div>

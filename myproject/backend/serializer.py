@@ -21,10 +21,7 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = '__all__' 
-class MessageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Message
-        fields = '__all__' 
+
 class ChatMessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ChatMessage
@@ -32,7 +29,12 @@ class ChatMessageSerializer(serializers.ModelSerializer):
 class LikeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Like
-        fields = '__all__' 
+        fields = '__all__'
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = '__all__'
+ 
 class UserSerializer(serializers.ModelSerializer):
     unread_count=serializers.SerializerMethodField()#来自该用户的未读消息 仅在加载聊天列表时使用
     friendly_time=serializers.SerializerMethodField()#与该用户最后一次聊天的时间（友好格式） 仅在加载聊天列表时使用

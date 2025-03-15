@@ -20,6 +20,7 @@
         <!-- <button @click="router.push('/my/msg')">Message Box(已弃用)
           <span v-if="unread_amount > 0" class="badge">{{ unread_amount }}</span>
         </button> -->
+        <button @click="router.push('/my/notification')">Notifications</button> 
         <button @click="router.push('/my/post')">My Posts</button>
         <button @click="router.push('/my/like')">My Likes</button>
         <button @click="router.push('/my/star')">My Stars</button>
@@ -34,15 +35,15 @@ import router from "@/routers/route"
 import { onMounted } from "vue";
 import { ref } from "vue";
 const username=localStorage.getItem('loginedUser')
-const unread_amount=ref(0)
 
-onMounted(()=>{
-  post('api/post/unread-num/',{
-    "username":username
-  },(res)=>{
-      unread_amount.value=res
-  })
-})
+
+// onMounted(()=>{
+//   post('api/post/unread-num/',{
+//     "username":username
+//   },(res)=>{
+//       unread_amount.value=res
+//   })
+// })
 </script>
 
 <style scoped>

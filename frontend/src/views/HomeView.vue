@@ -32,7 +32,8 @@ const changeCategory=(category)=>{
     <div class="homepage">
       <!-- Sidebar -->
       <div class="sidebar" >
-        <label class="sidebar-btn" @click="router.push('/')">Home</label> 
+        <label class="sidebar-btn" @click="router.push('/')">Home</label>
+        <label v-if="username!=null" class="sidebar-btn" @click="router.push('/my/notification')">Notification</label>  
         <!-- <label class="sidebar-btn" :class="{ active: selectedCategory === 'All'}" >All</label>
         <label class="sidebar-btn" :class="{ active: selectedCategory === 'Used'}" @click="changeCategory('Used')">Used</label>
         <label class="sidebar-btn" :class="{ active: selectedCategory === 'Sublet'}" @click="changeCategory('Sublet')">Sublet</label> -->

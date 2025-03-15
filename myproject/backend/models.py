@@ -16,28 +16,28 @@ class Banner(models.Model):
         return f'Banner {self.id} - {self.picture_url}'
 
 
-class User(models.Model):
-    id = models.AutoField(primary_key=True)  # 自增主键
-    username = models.CharField(max_length=255, unique=True)  # 用户名，确保唯一
-    password = models.CharField(max_length=255)  # 密码字段（建议加密存储）
-    role = models.CharField(max_length=255)  # 角色字段，如 admin, user 等
-    register_time = models.DateTimeField(auto_now_add=True)  # 注册时间，自动记录创建时间
-    level = models.IntegerField()  # 用户等级，默认初级
-    avatar = models.URLField(max_length=255, blank=True, null=True)  # 头像链接，可为空
+# class User(models.Model):
+#     id = models.AutoField(primary_key=True)  # 自增主键
+#     username = models.CharField(max_length=255, unique=True)  # 用户名，确保唯一
+#     password = models.CharField(max_length=255)  # 密码字段（建议加密存储）
+#     role = models.CharField(max_length=255)  # 角色字段，如 admin, user 等
+#     register_time = models.DateTimeField(auto_now_add=True)  # 注册时间，自动记录创建时间
+#     level = models.IntegerField()  # 用户等级，默认初级
+#     avatar = models.URLField(max_length=255, blank=True, null=True)  # 头像链接，可为空
 
-    class Meta:
-        db_table = 'user'  # 数据库表名为 user
-        verbose_name = 'User'  # Django 后台单数显示为 User
-        verbose_name_plural = 'Users'  # Django 后台复数显示为 Users
+#     class Meta:
+#         db_table = 'user'  # 数据库表名为 user
+#         verbose_name = 'User'  # Django 后台单数显示为 User
+#         verbose_name_plural = 'Users'  # Django 后台复数显示为 Users
 
-    def __str__(self):
-        return self.username  # 返回用户名作为模型的字符串表示
+#     def __str__(self):
+#         return self.username  # 返回用户名作为模型的字符串表示
 
 
 class Post(models.Model):
     id = models.AutoField(primary_key=True)  # 自增主键
     publisher_id = models.IntegerField()  # 发布者 ID，非空
-    publisher = models.CharField(max_length=255)
+    publisher = models.CharField(max_length=255,default='unknown')
     title = models.CharField(max_length=255)  # 标题，非空
     details = models.CharField(max_length=255)  # 详细描述，非空
     views = models.IntegerField(default=0)  # 浏览量，默认为 0
@@ -61,9 +61,9 @@ class Post(models.Model):
 class Comment(models.Model):
     id = models.AutoField(primary_key=True)  # 自增主键
     from_id = models.IntegerField()  # 评论者 ID，非空
-    from_user=models.CharField(max_length=255)
+    from_user=models.CharField(max_length=255,default='unknown')
     post_id = models.IntegerField()  # 所属帖子 ID，非空
-    to_user = models.CharField(max_length=255)  # 被回复用户
+    to_user = models.CharField(max_length=255,default='unknown')  # 被回复用户
     comment = models.CharField(max_length=255)  # 评论内容，最大长度 255，非空
     read = models.IntegerField(default=0)  # 是否已读，默认为 0
     create_time=models.DateTimeField(auto_now_add=True) 
@@ -78,8 +78,8 @@ class Comment(models.Model):
 
 class Like(models.Model):
     id = models.AutoField(primary_key=True)  # 自增主键
-    from_user = models.CharField(max_length=255)  # 点赞用户 ID，非空
-    to_user = models.CharField(max_length=255)  # 被点赞用户 ID，非空
+    from_user = models.CharField(max_length=255,default='unknown')  # 点赞用户 ID，非空
+    to_user = models.CharField(max_length=255,default='unknown')  # 被点赞用户 ID，非空
     post_id = models.IntegerField()  # 被点赞的帖子 ID，非空
     created_time = models.DateTimeField(auto_now_add=True)  # 点赞时间，自动记录
 
@@ -95,8 +95,8 @@ class Like(models.Model):
 
 class Collect(models.Model):
     id = models.AutoField(primary_key=True)  # 自增主键
-    from_user = models.CharField(max_length=255)  # 收藏用户 ID，非空
-    to_user = models.CharField(max_length=255)  # 被收藏用户 ID，非空
+    from_user = models.CharField(max_length=255, null=True, blank=True)  # 收藏用户 ID，非空
+    to_user = models.CharField(max_length=255, null=True, blank=True)  # 被收藏用户 ID，非空
     post_id = models.IntegerField()  # 被收藏的帖子 ID，非空
     created_time = models.DateTimeField(auto_now_add=True)  # 收藏时间，自动记录
 
@@ -110,23 +110,23 @@ class Collect(models.Model):
         return f'User {self.from_user} collected Post {self.post_id}'
 
 
-class Message(models.Model):
-    id = models.AutoField(primary_key=True)  # 自增主键
-    from_user = models.CharField(max_length=255)  # 发送者，非空
-    to_user = models.CharField(max_length=255)  # 接收者，非空
-    text = models.CharField(max_length=255)  # 消息内容，最大长度 255，非空
-    read = models.IntegerField(default=0)  # 是否已读，默认为未读 (False)
-    reply = models.IntegerField(default=0)  # 是否已读，默认为未读 (False) 
-    created_time = models.DateTimeField(auto_now_add=True)  # 创建时间，自动记录发送时间
+# class Message(models.Model):
+#     id = models.AutoField(primary_key=True)  # 自增主键
+#     from_user = models.CharField(max_length=255,default='unknown')  # 发送者，非空
+#     to_user = models.CharField(max_length=255,default='unknown')  # 接收者，非空
+#     text = models.CharField(max_length=255)  # 消息内容，最大长度 255，非空
+#     read = models.IntegerField(default=0)  # 是否已读，默认为未读 (False)
+#     reply = models.IntegerField(default=0)  # 是否已读，默认为未读 (False) 
+#     created_time = models.DateTimeField(auto_now_add=True)  # 创建时间，自动记录发送时间
 
-    class Meta:
-        db_table = 'message'  # 数据库表名为 message
-        verbose_name = 'Message'  # Django 后台单数显示为 Message
-        verbose_name_plural = 'Messages'  # Django 后台复数显示为 Messages
-        ordering = ['-created_time']  # 默认按消息创建时间倒序排列
+#     class Meta:
+#         db_table = 'message'  # 数据库表名为 message
+#         verbose_name = 'Message'  # Django 后台单数显示为 Message
+#         verbose_name_plural = 'Messages'  # Django 后台复数显示为 Messages
+#         ordering = ['-created_time']  # 默认按消息创建时间倒序排列
 
-    def __str__(self):
-        return f'Message from User {self.from_user} to User {self.to_user}'
+#     def __str__(self):
+#         return f'Message from User {self.from_user} to User {self.to_user}'
 
 
 
@@ -169,3 +169,22 @@ class UploadedFile(models.Model):
 
     def __str__(self):
         return self.file.name
+
+class Notification(models.Model):
+    category = models.CharField(max_length=255)#通知的分类
+    post = models.ForeignKey(Post,on_delete=models.CASCADE, related_name="post_notifications")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="notifications")  # ✅ 关联 User
+    from_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sent_notifications")  # ✅ 可空
+    title = models.CharField(max_length=255)
+    message = models.CharField(max_length=255)
+    is_read = models.IntegerField(default=0) #已读未读 默认0
+    create_at = models.DateTimeField(auto_now_add=True) 
+    update_at = models.DateTimeField(auto_now=True)
+    class Meta:
+        db_table = 'notification'
+        ordering = ['-create_at']  # 默认按 `order` 排序，如果为空则按 `id`
+        verbose_name = 'Notification'
+        verbose_name_plural = 'Notifications'
+        
+    def __str__(self):
+        return f"{self.user.username} - {self.category} - {self.title}" 

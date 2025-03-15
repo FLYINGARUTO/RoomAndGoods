@@ -129,7 +129,7 @@
    
           
           <div style="justify-content: space-between; display: flex; color: darkgray;">
-            <p>{{ post.user }}</p>
+            <p>{{ post.views }} views</p>
             <p>{{ post.date }}</p>
             <button class="delete-btn" @click.stop="delete_post(post.id)">delete</button>
             
