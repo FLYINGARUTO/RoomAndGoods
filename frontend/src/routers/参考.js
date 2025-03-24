@@ -1,5 +1,5 @@
 import {createRouter , createWebHistory} from "vue-router";
-import {isUnauthorized} from "../net/index.js"
+import {isUnauthorized} from "../net/index(localstorage).js"
 
 const router =createRouter({
 

@@ -54,6 +54,8 @@ CHANNEL_LAYERS = {
 }
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
+
+    
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -72,8 +74,13 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # 允许 Vue 前端访问的地址
     "http://127.0.0.1:5173",
+
     "http://172.30.131.225:5173"
 
+]
+# ✅ 允许 CSRF 跨域（如果用 Cookie 认证）
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
 ]
 # CORS_ALLOWED_ORIGIN_REGEXES = [
 #     r"^http://10\.223\..*:5173$",  # 允许所有 10.223.x.x 设备
@@ -93,7 +100,16 @@ CORS_ALLOW_HEADERS = [
     "x-requested-with",
     "headers",  # Allow the 'headers' field
 ]
+
 from datetime import timedelta
+# ✅ 允许哪些 HTTP 方法
+CORS_ALLOW_METHODS = [
+    "GET",
+    "POST",
+    "PUT",
+    "DELETE",
+    "OPTIONS"
+]
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=1),  # 设置 accessToken 有效期为 1 天

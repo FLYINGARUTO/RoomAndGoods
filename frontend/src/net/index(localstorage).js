@@ -84,8 +84,6 @@ function internalGet(url,header,success,failure=defaultFailure,error=defaultErro
 function post(url,data,success,failure=defaultFailure){
     internalPost(url,data,getTokenHeader(),success)
 }
-
-
 function get(url, success, failure = defaultFailure){
     internalGet(url,getTokenHeader(),success)
 }

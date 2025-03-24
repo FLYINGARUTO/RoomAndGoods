@@ -27,7 +27,15 @@
         </div>
       </div>
       <div style="text-align: center;">
-        <el-button class="button" :disabled="processing==true" @click="publishPost" type="success">Publish</el-button>
+        <el-button 
+        class="button" 
+        :loading="processing" 
+        :disabled="processing" 
+        @click="publishPost" 
+        type="success">
+        {{ processing ? "Publishing..." : "Publish" }}
+      </el-button>
+
       </div>
   
       
@@ -38,8 +46,11 @@
   <script setup>
   import { ref } from "vue";
   import {post,get,internalPost} from "@/net/index"
+  import { ElLoading, ElMessage } from "element-plus"; // ✅ 引入加载 & 消息组件
+
   import router from "@/routers/route";
   import { useUrlStore } from "@/store/urlStore";
+  import Compresser from "compressorjs"
   const urlStore = useUrlStore()
   const BASE_URL=urlStore.baseUrl
 
@@ -60,17 +71,35 @@
   const handleFileUpload = (event, index) => {
     const file = event.target.files[0];
     if (file) {
-      photos.value[index] = URL.createObjectURL(file); // Show preview
-      photoFiles.value[index] = file; // Store file for submission
+      new Compresser(file,{
+        quality: 0.7,
+        maxWidth: 1600,
+        success(result){
+          photos.value[index] = URL.createObjectURL(result); // Show preview
+          photoFiles.value[index] = new File([result], file.name, { type: file.type }); // 确保是 File
+        },
+        error(err){e
+          console.log("Compression Error:",err)
+        },
+      })
+      
     }
   };
   
   // 🔹 Send form data & files to backend
   const publishPost = () => {
     if(form.value.title=="" || form.value.type=="" ||form.value.details==""){
-      alert("All input items are required, please try again")
+      alert("All input fields are required!");
     }
     else{
+      alert('The server is located in Shanghai, so it may take some time to upload. We appreciate your patience')
+            // 显示加载框
+      // const loadingInstance = ElLoading.service({
+      //   lock: true,
+      //   text: "Publishing your post...",
+      //   background: "rgba((238, 238, 238, 1)",
+      //   fullscreen: true,  // ✅ 确保加载框完全覆盖屏幕
+      // });
       processing.value=true
       const formData = new FormData();
       formData.append("title", form.value.title);
@@ -96,7 +125,10 @@
           headers
         ,(response)=>{
           console.log("Upload Successful:", response);
-          alert("Post Published Successfully!");
+          alert("Post published successfully!");
+              // 关闭加载框
+          // loadingInstance.close();
+          console.log('published')
           processing.value=false
           //成功后清空页面
           form.value=[]
@@ -106,12 +138,14 @@
         },(error)=>{
           console.error("Upload Failed:", error);
           alert("Failed to publish post.");
+          // loadingInstance.close();
+          processing.value=false
+          form.value=[]
+          photos.value=Array(6).fill(null)
+          photoFiles.value=Array(6).fill(null)
           
         });
-        processing.value=false
-        form.value=[]
-        photos.value=Array(6).fill(null)
-        photoFiles.value=Array(6).fill(null)
+
     
     }
     
@@ -195,4 +229,4 @@
     border: 1px solid #333333;
   }
   </style>
-  
+  @/net/index(localstorage)

@@ -68,6 +68,26 @@ const router =createRouter({
             path:'/chat/:chatWith/:chatTarget',//chatwith id; chatTagert name
             name:'chatbox',
             component:()=>import('@/views/chat/chat.vue')
+        },{
+            path:'/admin/dashboard',
+            name:'adminDashboard',
+            component:()=>import('@/views/admin/AdminDashboard.vue'),
+            children:[
+                {
+                    path:'',
+                    name:"admin-post-list",
+                    component:()=>import('@/views/admin/AdminHome.vue')
+                },{
+                    path:'post-detail/:id',
+                    name:"admin-post-detail",
+                    props:true,
+                    component:()=>import('@/views/admin/AdminPostDetail.vue')
+                },{
+                    path:'user-list',
+                    name:"admin-userList",
+                    component:()=>import('@/views/admin/AdminUserList.vue')
+                }
+            ]
         },
         
     ]

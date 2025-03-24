@@ -10,6 +10,8 @@ import os
 from django.conf import settings
 from django.core.files.storage import default_storage
 import random
+from django.http import JsonResponse
+
 @api_view(['GET'])
 def hello_world(request):
     # banner=Banner.objects.create(picture_url="/static/pic/1.png",admin_id=10)
@@ -29,17 +31,17 @@ def post_test(request):
     postpic1.save()
     postpic2.save()
     return Response({'code':200,'message':"success"})
+from django.views.decorators.csrf import csrf_exempt
 
 #获取所有帖子
 @api_view(['GET'])
 def get_post_list(request):
-    posts = Post.objects.all()  # Get a single post
+    posts = Post.objects.filter(delete_time=None)  # Get a single post
     for post in posts:
        post.create_time=post.create_time.strftime("%Y/%m/%d %H:%M")
        
     serialized_post = PostSerializer(posts,many=True)  # Convert to JSON format
     return Response({'code': 200, 'data': serialized_post.data})
-
 #根据id获取帖子
 @api_view(['GET'])
 def get_post_by_id(request,id):
@@ -73,10 +75,11 @@ def get_comments(request,id):
 def comment(request):
     comment = request.data.get('comment')
     from_user = request.data.get('from-user') #评论的人 username string
+    from_id = request.user.id
     to_user = request.data.get('to-user') #被评论的人 
     post_id = request.data.get('post-id')
     #创建Comment记录
-    commentObj=Comment.objects.create(from_user=from_user,to_user=to_user,post_id=post_id,comment=comment)
+    commentObj=Comment.objects.create(from_id=from_id, from_user=from_user,to_user=to_user,post_id=post_id,comment=comment)
     #更新Post记录
     post=Post.objects.get(id=post_id)
     post.comments+=1

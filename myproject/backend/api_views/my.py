@@ -12,7 +12,7 @@ from datetime import datetime
 def get_liked_post(request):
     username=request.data.get('username')
     postIds=Like.objects.filter(from_user=username).values_list('post_id',flat=True) #获取到用户所有赞过的帖子的id
-    posts=Post.objects.filter(id__in=postIds)
+    posts=Post.objects.filter(id__in=postIds,delete_time=None)
     for post in posts:
        post.create_time=post.create_time.strftime("%Y-%m-%d %H:%M:%S")
     serilized=PostSerializer(posts,many=True)
@@ -23,7 +23,7 @@ def get_liked_post(request):
 def get_starred_post(request):
     username=request.data.get('username')
     postIds=Collect.objects.filter(from_user=username).values_list('post_id',flat=True) #获取到用户所有收藏过的帖子的id
-    posts=Post.objects.filter(id__in=postIds)
+    posts=Post.objects.filter(id__in=postIds,delete_time=None)
     for post in posts:
        post.create_time=post.create_time.strftime("%Y-%m-%d %H:%M:%S") 
     serilized=PostSerializer(posts,many=True)
@@ -33,7 +33,7 @@ def get_starred_post(request):
 @permission_classes([IsAuthenticated])
 def get_my_posts(request):
     username=request.data.get('username')
-    posts=Post.objects.filter(publisher=username)
+    posts=Post.objects.filter(publisher=username,delete_time=None)
     for post in posts:
        post.create_time=post.create_time.strftime("%Y-%m-%d %H:%M:%S")
     serilized=PostSerializer(posts,many=True) 

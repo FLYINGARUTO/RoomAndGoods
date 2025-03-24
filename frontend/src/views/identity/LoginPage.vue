@@ -11,6 +11,7 @@ const form =reactive({
   remember: false
 })
 const formRef=ref()
+const showDialog=ref(false)
 
 const rule={
   username:[
@@ -23,21 +24,48 @@ onMounted(()=>{
     localStorage.removeItem('accessToken')
     localStorage.removeItem('refreshToken')
     localStorage.removeItem('loginedUser')
+    localStorage.removeItem('loginedUserId')
+    localStorage.removeItem('isAdmin')
 })
-function loginForm(){
+function loginFormOld(){
   formRef.value.validate((valid)=>{
     if(valid){
       post('api/post/login/',{username:form.username,password:form.password},(res)=>{
         console.log("?",res)
         localStorage.setItem('loginedUser',res.loginedUser)
         localStorage.setItem('loginedUserId',res.userId) 
+        // if(res.token){
+        //   localStorage.setItem('accessToken',res.token.access)
+        //   localStorage.setItem('refreshToken',res.token.refresh)
+        // }
+        
+        router.push('/')
+        alert('Logged in')
+
+      })
+    }
+  })
+}
+function loginForm(){
+  formRef.value.validate((valid)=>{
+    if(valid){
+      post('api/post/login/',{username:form.username,password:form.password},(res)=>{
+        console.log("?",res)
+        localStorage.setItem('loginedUser',res.loginedUser)
+        localStorage.setItem('loginedUserId',res.userId)
+        localStorage.setItem("isAdmin", res.isAdmin);  // 存储管理员状态
         if(res.token){
           localStorage.setItem('accessToken',res.token.access)
           localStorage.setItem('refreshToken',res.token.refresh)
         }
         
-        router.push('/')
-        alert('Logged in')
+        if(res.isAdmin){
+          console.log("res.isAdmin:",res.isAdmin)
+          showDialog.value=true
+        }else{
+          router.push('/')
+        }
+
 
       })
     }
@@ -85,6 +113,15 @@ function loginForm(){
           </div>
       </el-form>
     </div>
+    <el-dialog v-model="showDialog" title="Divert" width="400px">
+        <span>Are you going to Admin Console?</span>
+        <template #footer>
+          <span>
+            <el-button @click="{showDialog = false;router.push('/');}">No</el-button>
+            <el-button type="success" @click="router.push('/admin/dashboard');">Yes</el-button>
+          </span>
+        </template>
+      </el-dialog>
   </div>
 </template>
 
@@ -101,4 +138,4 @@ function loginForm(){
     border: 1px solid #ddd;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
-</style>
+</style>@/net/index(localstorage)

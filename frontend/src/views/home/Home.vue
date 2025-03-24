@@ -14,13 +14,13 @@
     } from '@element-plus/icons-vue'
     // const postStore =usePostStore()
     import { useUrlStore } from '@/store/urlStore';
-import { ElButton } from 'element-plus';
+    import { ElButton } from 'element-plus';
     const urlStore =useUrlStore()
     const username=localStorage.getItem('loginedUser')
     const searchInput=ref("")
     const searchKey=ref("")
     onMounted(() => {
-        get("/api/get/post-list",(res)=>{
+        get("/api/get/post_list",(res)=>{
             console.log(res)
             posts.value=res.map(item=>({
               id: item.id,
@@ -67,7 +67,7 @@ import { ElButton } from 'element-plus';
         router.push(`/post/${postId}`)
     }
     const toPost=()=>{
-      if(!localStorage.getItem('accessToken')){
+      if(!localStorage.getItem('loginedUser')){
         alert('please login first')
       }else{
         router.push('/post/new')
@@ -295,4 +295,4 @@ img{
   gap: 10px;
 }
   </style>
-  
+  @/net/index(localstorage)
